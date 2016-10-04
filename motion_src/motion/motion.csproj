@@ -203,13 +203,13 @@
     <None Include="Copyright.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dshow\m_dshow.csproj">
+    <ProjectReference Include="..\dshow\dshow.csproj">
       <Project>{37B08AFD-F4BC-4E13-9119-537BA6A12CCB}</Project>
-      <Name>m_dshow</Name>
+      <Name>dshow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\vfw\m_vfw.csproj">
+    <ProjectReference Include="..\vfw\vfw.csproj">
       <Project>{ECAA3D55-19AB-440B-B82E-221AE06C4A5B}</Project>
-      <Name>m_vfw</Name>
+      <Name>vfw</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
