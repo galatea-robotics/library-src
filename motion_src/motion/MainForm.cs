@@ -440,7 +440,7 @@ namespace motion
             {
                 // create video source
                 CaptureDevice localSource = new CaptureDevice( );
-                localSource.VideoSource = form.Device;
+                localSource.VideoSource = CaptureDeviceForm.Device;
 
                 // open it
                 OpenVideoSource( localSource );

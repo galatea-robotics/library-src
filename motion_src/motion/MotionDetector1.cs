@@ -24,7 +24,7 @@ namespace motion
 		private Merge mergeFilter = new Merge( );
 
 		private IFilter extrachChannel = new ExtractChannel( RGB.R );
-		private ReplaceChannel replaceChannel = new ReplaceChannel( RGB.R, null );
+		private ReplaceChannel replaceChannel = new ReplaceChannel( RGB.R );
 
 		private Bitmap	backgroundFrame;
         private BitmapData bitmapData;

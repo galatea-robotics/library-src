@@ -11,8 +11,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>motion</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\motion.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -85,15 +84,10 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge.Imaging">
-      <Name>AForge.Imaging</Name>
-      <HintPath>..\references\AForge.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Math">
-      <Name>AForge.Math</Name>
-      <HintPath>..\references\AForge.Math.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -200,9 +194,16 @@
       <DependentUpon>URLForm.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="App.ico" />
+    <None Include="..\motion.snk">
+      <Link>motion.snk</Link>
+    </None>
     <None Include="Copyright.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AForge.NET Framework-2.2.3\Sources\Imaging\Imaging %28mono%29.csproj">
+      <Project>{0e6dfeb9-e4c4-46db-bb5f-424f7275d114}</Project>
+      <Name>Imaging %28mono%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dshow\dshow.csproj">
       <Project>{37B08AFD-F4BC-4E13-9119-537BA6A12CCB}</Project>
       <Name>dshow</Name>

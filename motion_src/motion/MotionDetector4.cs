@@ -133,7 +133,7 @@ namespace motion
 
             // get object rectangles
             blobCounter.ProcessImage( bitmapData );
-            rects = blobCounter.GetObjectRectangles( );
+            rects = blobCounter.GetObjectsRectangles( );
 
             // unlock temporary image
             tmpImage.UnlockBits( bitmapData );

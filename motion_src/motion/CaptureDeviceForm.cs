@@ -13,12 +13,12 @@ namespace motion
 	/// </summary>
 	public class CaptureDeviceForm : System.Windows.Forms.Form
 	{
-		FilterCollection filters;
+        private FilterCollection filters;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox deviceCombo;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.Button okButton;
-		private string device;
+		private static string device;
 
 		/// <summary>
 		/// Required designer variable.
@@ -26,7 +26,7 @@ namespace motion
 		private System.ComponentModel.Container components = null;
 
 		// Device
-		public string Device
+		public static string Device
 		{
 			get { return device; }
 		}
@@ -61,12 +61,15 @@ namespace motion
 			}
 
 			deviceCombo.SelectedIndex = 0;
-		}
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
+            // Set Default
+            device = filters[deviceCombo.SelectedIndex].MonikerString;
+        }
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
 		{
 			if( disposing )
 			{
