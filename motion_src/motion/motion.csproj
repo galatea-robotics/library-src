@@ -20,8 +20,8 @@
     <RootNamespace>motion</RootNamespace>
     <StartupObject>
     </StartupObject>
-    <FileUpgradeFlags>0</FileUpgradeFlags>
-    <UpgradeBackupLocation>C:\GALA\GALA 2016\Backup2\</UpgradeBackupLocation>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>C:\GALA\GALA 2016\Backup\</UpgradeBackupLocation>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OldToolsVersion>14.0</OldToolsVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
