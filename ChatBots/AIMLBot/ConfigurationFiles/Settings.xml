@@ -14,7 +14,8 @@
   <item name="stripperregex" value="[^0-9a-zA-Z]"/>
   <item name="version" value="Unknown"/>
   <item name="name" value="Unknown"/>
-  <item name="botmaster" value="Unknown"/>
+  <item name="botmaster" value="MAKER"/>
+  <item name="master" value="MAKER"/>
   <item name="author" value="Nicholas H.Tollervey"/>
   <item name="location" value="Unknown"/>
   <item name="gender" value="-1"/>
