@@ -118,7 +118,7 @@ namespace AIMLBot.Utils
         public string evaluate(string path, SubQuery query, Request request, MatchState matchstate, StringBuilder wildcard)
         {
             // check for timeout
-            if (request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
+            if (!request.overrideTimeout && request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
             {
                 request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\"");
                 request.hasTimedOut = true;

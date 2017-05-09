@@ -40,6 +40,8 @@ namespace AIMLBot
         /// </summary>
         public bool hasTimedOut = false;
 
+        public bool overrideTimeout = false;
+
         #endregion
 
         /// <summary>
@@ -48,12 +50,13 @@ namespace AIMLBot
         /// <param name="rawInput">The raw input from the user</param>
         /// <param name="user">The user who made the request</param>
         /// <param name="bot">The bot to which this is a request</param>
-        public Request(string rawInput, User user, Bot bot)
+        public Request(string rawInput, User user, Bot bot, bool overrideTimeout)
         {
             this.rawInput = rawInput;
             this.user = user;
             this.bot = bot;
             this.StartedOn = DateTime.Now;
+            this.overrideTimeout = overrideTimeout;
         }
     }
 }

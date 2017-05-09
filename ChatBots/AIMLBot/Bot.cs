@@ -652,7 +652,7 @@ namespace AIMLBot
         /// <returns>the result to be output to the user</returns>
         public Result Chat(string rawInput, string UserGUID)
         {
-            Request request = new Request(rawInput, new User(UserGUID, this), this);
+            Request request = new Request(rawInput, new User(UserGUID, this), this, false);
             return this.Chat(request);
         }
 
@@ -735,7 +735,7 @@ namespace AIMLBot
         private string processNode(XmlNode node, SubQuery query, Request request, Result result, User user)
         {
             // check for timeout (to avoid infinite loops)
-            if (request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
+            if (!request.overrideTimeout && request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
             {
                 request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\" processing template: \""+query.Template+"\"");
                 request.hasTimedOut = true;
