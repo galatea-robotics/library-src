@@ -667,7 +667,7 @@ namespace motion
                         // open AVI file
                         writer.Open( fileName, cameraWindow.Camera.Width, cameraWindow.Camera.Height );
                     }
-                    catch ( ApplicationException ex )
+                    catch ( ApplicationException )
                     {
                         if ( writer != null )
                         {

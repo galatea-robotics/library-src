@@ -30,7 +30,7 @@ namespace motion
 
 		// AutoSize property
 		[DefaultValue(false)]
-		public bool AutoSize
+		public override bool AutoSize
 		{
 			get { return autosize; }
 			set
