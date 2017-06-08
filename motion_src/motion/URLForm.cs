@@ -56,9 +56,7 @@ namespace motion
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+			// Add any constructor code after InitializeComponent call
 		}
 
 		/// <summary>

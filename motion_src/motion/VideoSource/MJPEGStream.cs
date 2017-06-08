@@ -295,7 +295,7 @@ namespace VideoSource
 													{
 														// boundary located
 														align = 1;
-														todo -= boundaryLen;
+														ttodo -= boundaryLen;
 														pos += boundaryLen;
 													}
 													else

@@ -31,9 +31,7 @@ namespace motion
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
+			// Add any constructor code after InitializeComponent call
 			mailLabel.Links.Add(0, mailLabel.Text.Length, "mailto:andrew.kirillov@gmail.com");
             aforgeLabel.Links.Add( 0, aforgeLabel.Text.Length, "http://code.google.com/p/aforge/" );
         }
