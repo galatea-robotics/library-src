@@ -8,7 +8,9 @@ namespace AIMLBot.Utils
     /// <summary>
     /// Encapsulates a node in the graphmaster tree structure
     /// </summary>
+#if !NETFX_CORE
     [Serializable]
+#endif
     public class Node
     {
         #region Attributes
