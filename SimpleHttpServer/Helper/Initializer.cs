@@ -148,7 +148,7 @@ namespace SimpleHttpServer.Helper
             HttpListener = httpListener;
             CommunicationInterface = communicationInterface;
         }
-        IHttpListener HttpListener { get; }
-        ICommunicationInterface CommunicationInterface { get; }
+        public IHttpListener HttpListener { get; }
+        public ICommunicationInterface CommunicationInterface { get; }
     }
 }
