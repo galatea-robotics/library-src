@@ -4,7 +4,7 @@ using SimpleHttpServer.Model;
 
 namespace SimpleHttpServer.Parser
 {
-    internal class HttpParserDelegate : IHttpParserCombinedDelegate
+    internal class HttpParserDelegate : IHttpParserCombinedDelegate, IDisposable
     {
         public readonly HttpRequestReponse HttpRequestReponse = new HttpRequestReponse();
 
@@ -125,7 +125,7 @@ namespace SimpleHttpServer.Parser
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            HttpRequestReponse.Dispose();
         }
     }
 }

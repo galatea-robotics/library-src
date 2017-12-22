@@ -13,7 +13,7 @@ using SimpleHttpServer.Service.Base;
 
 namespace SimpleHttpServer.Service
 {
-    public partial class HttpListener : ComposeBase, IHttpListener
+    public partial class HttpListener : ComposeBase, IHttpListener, IDisposable
     {
         private ITcpSocketListener _tcpListener;
         private IUdpSocketReceiver _udpListener;
@@ -25,42 +25,54 @@ namespace SimpleHttpServer.Service
                 .Merge(_udpListener.ObservableMessages)
                 .Select(
                     udpSocket =>
-                    {
-                        var stream = new MemoryStream(udpSocket.ByteData);
-                        var requestHandler = new HttpParserDelegate
+                    {                        
+                        MemoryStream stream = null;
+                        HttpParserDelegate requestHandler = null;
+                        try
                         {
-                            HttpRequestReponse =
-                            {
-                                RemoteAddress = udpSocket.RemoteAddress,
-                                RemotePort = int.Parse(udpSocket.RemotePort),
-                                RequestType = RequestType.UDP
-                            }
-                        };
+                            stream = new MemoryStream(udpSocket.ByteData);
 
-                        return _httpStreamParser.Parse(requestHandler, stream, Timeout);
+                            requestHandler = new HttpParserDelegate();
+                            requestHandler.HttpRequestReponse.RemoteAddress = udpSocket.RemoteAddress;
+                            requestHandler.HttpRequestReponse.RemotePort = int.Parse(udpSocket.RemotePort);
+                            requestHandler.HttpRequestReponse.RequestType = RequestType.UDP;
+
+                            return _httpStreamParser.Parse(requestHandler, stream, Timeout);
+                        }
+                        catch
+                        {
+                            stream.Dispose();
+                            requestHandler.Dispose();
+                            throw;
+                        }
                     });
-
 
         private IObservable<IHttpRequestReponse> TcpRequestResponseObservable =>
             _tcpListener.ObservableTcpSocket
-                .Merge(_tcpResponseListener.ObservableTcpSocket).Select(
+                .Merge(_tcpResponseListener.ObservableTcpSocket)
+                .Select(
                     tcpSocket =>
                     {
-                        var stream = tcpSocket.ReadStream;
-
-                        var requestHandler = new HttpParserDelegate
+                        Stream stream = tcpSocket.ReadStream;
+                        HttpParserDelegate requestHandler = null;
+                        try
                         {
-                            HttpRequestReponse =
-                            {
-                                RemoteAddress = tcpSocket.RemoteAddress,
-                                RemotePort = tcpSocket.RemotePort,
-                                TcpSocketClient = tcpSocket,
-                                RequestType = RequestType.TCP
-                            }
-                        };
+                            requestHandler = new HttpParserDelegate();
+                            requestHandler.HttpRequestReponse.RemoteAddress = tcpSocket.RemoteAddress;
+                            requestHandler.HttpRequestReponse.RemotePort = tcpSocket.RemotePort;
+                            requestHandler.HttpRequestReponse.TcpSocketClient = tcpSocket;
+                            requestHandler.HttpRequestReponse.RequestType = RequestType.TCP;
 
-                        return _httpStreamParser.Parse(requestHandler, stream, Timeout);
-                    }).ObserveOn(Scheduler.Default);
+                            // Finalize
+                            return _httpStreamParser.Parse(requestHandler, stream, Timeout);
+                        }
+                        catch
+                        {
+                            requestHandler.Dispose();
+                            throw;
+                        }
+                    })
+            .ObserveOn(Scheduler.Default);
 
         // Listening to both UDP and TCP and merging the Http Request streams
         // into one unified IObservable stream of Http Requests
@@ -111,7 +123,6 @@ namespace SimpleHttpServer.Service
         [Obsolete("Deprecated")]
         public IObservable<IHttpResponse> HttpResponseObservable => _httpResponseObservable;
 
-
         [Obsolete("Deprecated")]
         public async Task StartTcpRequestListener(
             int port,
@@ -130,7 +141,6 @@ namespace SimpleHttpServer.Service
         {
             await
                 _tcpResponseListener.StartListeningAsync(port, communicationInterface, allowMultipleBindToSamePort);
-
         }
 
         [Obsolete("Deprecated")]
@@ -203,6 +213,55 @@ namespace SimpleHttpServer.Service
         {
             await HttpSendReponseAsync(request, response);
         }
+
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // dispose managed state (managed objects).
+                    _tcpListener.Dispose();
+                    _tcpRequestListener.Dispose();
+                    _tcpResponseListener.Dispose();
+                    _udpListener.Dispose();
+                    _udpMultiCastListener.Dispose();
+                }
+
+                // free unmanaged resources (unmanaged objects) and override a finalizer below.
+
+                // set large fields to null.
+                _tcpListener = null;
+                _udpListener = null;
+                _udpMultiCastListener = null;
+                _udpMulticastRequestResponseObservable = null;
+
+                disposedValue = true;
+            }
+        }
+
+        // override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+         ~HttpListener()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(false);
+        }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // uncomment the following line if the finalizer is overridden above.
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+
     }
 
 }

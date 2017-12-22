@@ -342,16 +342,5 @@ namespace SimpleHttpServer.Service
                 }
             }
         }
-
-
-        public virtual void Dispose()
-        {
-            _tcpListener.Dispose();
-            _tcpRequestListener.Dispose();
-            _tcpResponseListener.Dispose();
-            _tcpResponseListener.Dispose();
-            _udpListener.Dispose();
-            _udpMultiCastListener.Dispose();
-        }
     }
 }

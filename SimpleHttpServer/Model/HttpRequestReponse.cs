@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using HttpMachine;
 using ISocketLite.PCL.Interface;
@@ -7,8 +7,12 @@ using SimpleHttpServer.Model.Base;
 
 namespace SimpleHttpServer.Model
 {
-    public class HttpRequestReponse : HttpHeaderBase, IHttpRequestReponse
+    public class HttpRequestReponse : HttpHeaderBase, IHttpRequestReponse, System.IDisposable
     {
+        public HttpRequestReponse()
+        {
+            Body = new MemoryStream();
+        }
         public MessageType MessageType { get; internal set; }
         public int StatusCode { get; internal set; }
         public string ResponseReason { get; internal set; }
@@ -22,6 +26,21 @@ namespace SimpleHttpServer.Model
         public string QueryString { get; internal set; }
         public string Fragment { get; internal set; }
         public bool IsChunked { get; internal set; }
-        public MemoryStream Body { get; internal set; } = new MemoryStream();       
+        public MemoryStream Body { get; internal set; }       
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);            
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Body.Dispose();
+                TcpSocketClient.Dispose();
+            }
+        }
     }
 }

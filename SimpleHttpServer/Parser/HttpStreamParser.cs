@@ -29,29 +29,26 @@ namespace SimpleHttpServer.Parser
                         {
                             requestHandler.HttpRequestReponse.IsUnableToParseHttp = true;
                         }
-
                     },
                     ex =>
                     {
-                        if (ex is TimeoutException)
+                        try
                         {
-                            requestHandler = new HttpParserDelegate
+                            requestHandler = new HttpParserDelegate();
+
+                            if (ex is TimeoutException)
                             {
-                                HttpRequestReponse =
-                                {
-                                IsRequestTimedOut = true
-                                }
-                            };
+                                requestHandler.HttpRequestReponse.IsRequestTimedOut = true;
+                            }
+                            else
+                            {
+                                requestHandler.HttpRequestReponse.IsUnableToParseHttp = true;
+                            }
                         }
-                        else
+                        catch
                         {
-                            requestHandler = new HttpParserDelegate
-                            {
-                                HttpRequestReponse =
-                                {
-                                IsUnableToParseHttp = true
-                                }
-                            };
+                            requestHandler.Dispose();
+                            throw;
                         }
                     },
                     () =>

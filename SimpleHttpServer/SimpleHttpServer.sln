@@ -7,10 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHttpServer", "SimpleH
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Analysis|Any CPU = Analysis|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}.Analysis|Any CPU.ActiveCfg = Analysis|Any CPU
+		{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}.Analysis|Any CPU.Build.0 = Analysis|Any CPU
 		{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}.Release|Any CPU.ActiveCfg = Release|Any CPU

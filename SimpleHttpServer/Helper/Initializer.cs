@@ -114,11 +114,22 @@ namespace SimpleHttpServer.Helper
                 timeout = TimeSpan.FromSeconds(30);
             }
 
-            var httpListener = new HttpListener(communicationInterface, timeout);
+            HttpListener httpListener = null;
+            HttpListener httpListenerResult = null;
+            try
+            {
+                httpListener = new HttpListener(communicationInterface, timeout);
+                //await httpListener.StartTcpRequestListener(port, communicationInterface);
 
-            //await httpListener.StartTcpRequestListener(port, communicationInterface);
-
-            return new ListenerCommunicationInterface(httpListener, communicationInterface);
+                // Finalize
+                httpListenerResult = httpListener;
+                httpListener = null;
+            }
+            finally
+            {
+                httpListener?.Dispose();
+            }
+            return new ListenerCommunicationInterface(httpListenerResult, communicationInterface);
         }
     }
 
