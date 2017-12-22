@@ -7,13 +7,13 @@ using SimpleHttpServer.Model;
 
 namespace SimpleHttpServer.Parser
 {
-    internal class HttpStreamParser
+    internal static class HttpStreamParser
     {
-        internal IHttpRequestReponse Parse(HttpParserDelegate requestHandler, Stream stream, TimeSpan timeout)
+        internal static IHttpRequestReponse Parse(HttpParserDelegate requestHandler, Stream stream, TimeSpan timeout)
         {
             using (var parserHandler = new HttpCombinedParser(requestHandler))
             {
-                var observeRequstStream = new ObservableHttpData().Create(requestHandler.HttpRequestReponse, stream, timeout);
+                var observeRequstStream = ObservableHttpData.Create(requestHandler.HttpRequestReponse, stream, timeout);
 
                 var observerRequestSubscriber = observeRequstStream.Subscribe(
                     bArray =>

@@ -10,7 +10,7 @@ namespace SimpleHttpServer.Model
         bool ShouldKeepAlive { get; }
         object UserContext { get; }
         string Method { get;}
-        string RequestUri { get; }
+        System.Uri RequestUri { get; }
         string Path { get; }
         string QueryString { get; }
         string Fragment { get;}

@@ -10,7 +10,7 @@ namespace SimpleHttpServer.Model
 {
     internal class ObservableHttpData
     {
-        internal IObservable<byte[]> Create(IParseControl parseControl, Stream stream, TimeSpan timeout)
+        internal static IObservable<byte[]> Create(IParseControl parseControl, Stream stream, TimeSpan timeout)
         {
             return Observable.Create<byte[]>(
                 obs =>

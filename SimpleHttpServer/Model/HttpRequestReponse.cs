@@ -7,6 +7,7 @@ using SimpleHttpServer.Model.Base;
 
 namespace SimpleHttpServer.Model
 {
+    [CLSCompliant(false)]
     public class HttpRequestReponse : HttpHeaderBase, IHttpRequestReponse, System.IDisposable
     {
         public HttpRequestReponse()
@@ -21,7 +22,7 @@ namespace SimpleHttpServer.Model
         public bool ShouldKeepAlive { get; internal set; }
         public object UserContext { get; internal set; }
         public string Method { get; internal set; }
-        public string RequestUri { get; internal set; }
+        public System.Uri RequestUri { get; internal set; }
         public string Path { get; internal set; }
         public string QueryString { get; internal set; }
         public string Fragment { get; internal set; }

@@ -7,14 +7,21 @@ using SimpleHttpServer.Model;
 
 namespace SimpleHttpServer.Service.Base
 {
+    using static System.FormattableStringExtension;
+
     public abstract class ComposeBase
     {
         public byte[] ComposeResponse(IHttpRequest request, IHttpResponse response)
         {
+            if (request == null) throw new ArgumentNullException("request");
+            if (response == null) throw new ArgumentNullException("response");
+
+            // Initialize
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append(
-                $"HTTP/{request.MajorVersion}.{request.MinorVersion} {(int)response.StatusCode} {response.ResponseReason}\r\n");
+            // Compose Response
+            stringBuilder.Append(CurrentCultureFormat(
+                $"HTTP/{request.MajorVersion}.{request.MinorVersion} {(int)response.StatusCode} {response.ResponseReason}\r\n"));
 
             if (response.Headers != null)
             {
@@ -22,14 +29,14 @@ namespace SimpleHttpServer.Service.Base
                 {
                     foreach (var header in response.Headers)
                     {
-                        stringBuilder.Append($"{header.Key}: {header.Value}\r\n");
+                        stringBuilder.Append(CurrentCultureFormat($"{header.Key}: {header.Value}\r\n"));
                     }
                 }
             }
 
             if (response.Body?.Length > 0)
             {
-                stringBuilder.Append($"Content-Length: {response?.Body?.Length}");
+                stringBuilder.Append(CurrentCultureFormat($"Content-Length: {response?.Body?.Length}"));
             }
 
             stringBuilder.Append("\r\n\r\n");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -28,22 +29,26 @@ namespace SimpleHttpServer.Service
                     {                        
                         MemoryStream stream = null;
                         HttpParserDelegate requestHandler = null;
+                        HttpParserDelegate requestHandlerResult = null;
                         try
                         {
                             stream = new MemoryStream(udpSocket.ByteData);
 
                             requestHandler = new HttpParserDelegate();
                             requestHandler.HttpRequestReponse.RemoteAddress = udpSocket.RemoteAddress;
-                            requestHandler.HttpRequestReponse.RemotePort = int.Parse(udpSocket.RemotePort);
-                            requestHandler.HttpRequestReponse.RequestType = RequestType.UDP;
+                            requestHandler.HttpRequestReponse.RemotePort = int.Parse(udpSocket.RemotePort, CultureInfo.CurrentCulture);
+                            requestHandler.HttpRequestReponse.RequestType = RequestType.Udp;
 
-                            return _httpStreamParser.Parse(requestHandler, stream, Timeout);
+                            // Finalize
+                            requestHandlerResult = requestHandler;
+                            requestHandler = null;
+
+                            return HttpStreamParser.Parse(requestHandlerResult, stream, Timeout);
                         }
-                        catch
+                        finally
                         {
-                            stream.Dispose();
-                            requestHandler.Dispose();
-                            throw;
+                            requestHandler?.Dispose();
+                            stream?.Dispose();
                         }
                     });
 
@@ -55,21 +60,24 @@ namespace SimpleHttpServer.Service
                     {
                         Stream stream = tcpSocket.ReadStream;
                         HttpParserDelegate requestHandler = null;
+                        HttpParserDelegate requestHandlerResult = null;
                         try
                         {
                             requestHandler = new HttpParserDelegate();
                             requestHandler.HttpRequestReponse.RemoteAddress = tcpSocket.RemoteAddress;
                             requestHandler.HttpRequestReponse.RemotePort = tcpSocket.RemotePort;
                             requestHandler.HttpRequestReponse.TcpSocketClient = tcpSocket;
-                            requestHandler.HttpRequestReponse.RequestType = RequestType.TCP;
+                            requestHandler.HttpRequestReponse.RequestType = RequestType.Tcp;
 
                             // Finalize
-                            return _httpStreamParser.Parse(requestHandler, stream, Timeout);
+                            requestHandlerResult = requestHandler;
+                            requestHandler = null;
+
+                            return HttpStreamParser.Parse(requestHandlerResult, stream, Timeout);
                         }
-                        catch
+                        finally
                         {
-                            requestHandler.Dispose();
-                            throw;
+                            if (requestHandler != null) requestHandler.Dispose();
                         }
                     })
             .ObserveOn(Scheduler.Default);

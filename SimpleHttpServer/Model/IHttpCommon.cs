@@ -4,6 +4,7 @@ using ISocketLite.PCL.Interface;
 
 namespace SimpleHttpServer.Model
 {
+    [System.CLSCompliant(false)]
     public interface IHttpCommon
     {
         RequestType RequestType { get; }

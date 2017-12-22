@@ -14,6 +14,7 @@ namespace SimpleHttpServer.Helper
     using SimpleHttpServer.Service;
     using SimpleHttpServer.Model;
 
+    [CLSCompliant(false)]
     public static class Initializer
     {
         private static string _method;
@@ -21,7 +22,6 @@ namespace SimpleHttpServer.Helper
 
         public static string Method { get { return _method; } }
         public static string Path { get { return _path; } }
-
 
         internal static ICommunicationInterface GetDefaultCommunicationsInterface()
         {
@@ -52,7 +52,7 @@ namespace SimpleHttpServer.Helper
                     {
                         _method = request?.Method ?? "N/A";
                         _path = request?.Path ?? "N/A";
-                        if (request.RequestType == RequestType.TCP)
+                        if (request.RequestType == RequestType.Tcp)
                         {
                             var response = new HttpReponse
                             {
@@ -83,12 +83,15 @@ namespace SimpleHttpServer.Helper
             observeHttpRequests.Dispose();
         }
 
-        public static ListenerCommunicationInterface GetListener(
-            string ipAddress,
-            int port,
-            TimeSpan timeout = default(TimeSpan))
+        public static async Task<ListenerCommunicationInterface> GetListener(
+            string ipAddress, int port)
         {
+            return await GetListener(ipAddress, port, default(TimeSpan));
+        }
 
+        public static async Task<ListenerCommunicationInterface> GetListener(
+            string ipAddress, int port, TimeSpan timeout)
+        {
             if (timeout == default(TimeSpan))
             {
                 timeout = TimeSpan.FromSeconds(30);
@@ -101,13 +104,17 @@ namespace SimpleHttpServer.Helper
 
             if (firstUsableInterface == null) throw new ArgumentException($"Unable to locate any network communication interface with the ip address: {ipAddress}");
 
-            return (GetListener(firstUsableInterface, port));
+            return await (GetListener(firstUsableInterface, port));
         }
 
-        public static ListenerCommunicationInterface GetListener(
-            ICommunicationInterface communicationInterface,
-            int port,
-            TimeSpan timeout = default(TimeSpan))
+        public static async Task<ListenerCommunicationInterface> GetListener(
+            ICommunicationInterface communicationInterface, int port)
+        {
+            return await GetListener(communicationInterface, port, default(TimeSpan));
+        }
+
+        public static async Task<ListenerCommunicationInterface> GetListener(
+            ICommunicationInterface communicationInterface, int port, TimeSpan timeout)
         {
             if (timeout == default(TimeSpan))
             {
@@ -119,7 +126,7 @@ namespace SimpleHttpServer.Helper
             try
             {
                 httpListener = new HttpListener(communicationInterface, timeout);
-                //await httpListener.StartTcpRequestListener(port, communicationInterface);
+                await httpListener.StartTcpRequestListener(port, communicationInterface);
 
                 // Finalize
                 httpListenerResult = httpListener;
@@ -127,13 +134,14 @@ namespace SimpleHttpServer.Helper
             }
             finally
             {
-                httpListener?.Dispose();
+                if (httpListener != null) httpListener.Dispose();
             }
             return new ListenerCommunicationInterface(httpListenerResult, communicationInterface);
         }
     }
 
-    public struct ListenerCommunicationInterface
+    [CLSCompliant(false)]
+    public class ListenerCommunicationInterface
     {
         public ListenerCommunicationInterface(IHttpListener httpListener, ICommunicationInterface communicationInterface)
         {

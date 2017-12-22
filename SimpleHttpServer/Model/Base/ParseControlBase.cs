@@ -3,6 +3,7 @@ using ISocketLite.PCL.Interface;
 
 namespace SimpleHttpServer.Model.Base
 {
+    [System.CLSCompliant(false)]
     public abstract class ParseControlBase : IParseControl
     {
         public RequestType RequestType { get; internal set; }

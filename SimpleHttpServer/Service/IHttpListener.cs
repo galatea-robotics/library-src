@@ -6,6 +6,7 @@ using ISocketLite.PCL.Interface;
 
 namespace SimpleHttpServer.Service
 {
+    [CLSCompliant(false)]
     public interface IHttpListener
     {
 
@@ -68,33 +69,30 @@ namespace SimpleHttpServer.Service
         #endregion
 
         TimeSpan Timeout { get; set; }
-        
-        Task<IObservable<IHttpRequest>> TcpHttpRequestObservable(
-            int port,
-            bool allowMultipleBindToSamePort = false);
 
-        Task<IObservable<IHttpResponse>> TcpHttpResponseObservable(
-            int port,
-            bool allowMultipleBindToSamePort = false);
+        Task<IObservable<IHttpRequest>> TcpHttpRequestObservable(int port);
 
+        Task<IObservable<IHttpRequest>> TcpHttpRequestObservable(int port, bool allowMultipleBindToSamePort);
 
-        Task<IObservable<IHttpRequest>> UdpHttpRequestObservable(
-            int port,
-            bool allowMultipleBindToSamePort = false);
+        Task<IObservable<IHttpResponse>> TcpHttpResponseObservable(int port);
 
-        Task<IObservable<IHttpResponse>> UdpHttpResponseObservable(
-            int port,
-            bool allowMultipleBindToSamePort = false);
+        Task<IObservable<IHttpResponse>> TcpHttpResponseObservable(int port, bool allowMultipleBindToSamePort);
 
-        Task<IObservable<IHttpRequest>> UdpMulticastHttpRequestObservable(
-            string ipAddr,
-            int port,
-            bool allowMultipleBindToSamePort = false);
+        Task<IObservable<IHttpRequest>> UdpHttpRequestObservable(int port);
 
-        Task<IObservable<IHttpResponse>> UdpMulticastHttpResponseObservable(
-            string ipAddr,
-            int port,
-            bool allowMultipleBindToSamePort = false);
+        Task<IObservable<IHttpRequest>> UdpHttpRequestObservable(int port, bool allowMultipleBindToSamePort);
+
+        Task<IObservable<IHttpResponse>> UdpHttpResponseObservable(int port);
+
+        Task<IObservable<IHttpResponse>> UdpHttpResponseObservable(int port, bool allowMultipleBindToSamePort);
+
+        Task<IObservable<IHttpRequest>> UdpMulticastHttpRequestObservable(string ipAddr, int port);
+
+        Task<IObservable<IHttpRequest>> UdpMulticastHttpRequestObservable(string ipAddr, int port, bool allowMultipleBindToSamePort);
+
+        Task<IObservable<IHttpResponse>> UdpMulticastHttpResponseObservable(string ipAddr, int port);
+
+        Task<IObservable<IHttpResponse>> UdpMulticastHttpResponseObservable(string ipAddr, int port, bool allowMultipleBindToSamePort);
 
         Task HttpSendReponseAsync(IHttpRequest request, IHttpResponse response);
 

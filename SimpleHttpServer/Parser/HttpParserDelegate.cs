@@ -4,6 +4,8 @@ using SimpleHttpServer.Model;
 
 namespace SimpleHttpServer.Parser
 {
+    using static System.FormattableStringExtension;
+
     internal class HttpParserDelegate : IHttpParserCombinedDelegate, IDisposable
     {
         public readonly HttpRequestReponse HttpRequestReponse = new HttpRequestReponse();
@@ -33,7 +35,7 @@ namespace SimpleHttpServer.Parser
 
         public void OnRequestUri(HttpCombinedParser parser, string requestUri)
         {
-            HttpRequestReponse.RequestUri = requestUri;
+            HttpRequestReponse.RequestUri = new Uri(requestUri);
         }
 
         public void OnPath(HttpCombinedParser parser, string path)
@@ -58,6 +60,7 @@ namespace SimpleHttpServer.Parser
         //http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
         public void OnHeaderName(HttpCombinedParser parser, string name)
         {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
 
             if (HttpRequestReponse.Headers.ContainsKey(name.ToUpper()))
             {
@@ -72,7 +75,7 @@ namespace SimpleHttpServer.Parser
             if (_headerAlreadyExist)
             {
                 // Join multiple message-header fields into one comma seperated list http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2
-                HttpRequestReponse.Headers[_headerName] = $"{HttpRequestReponse.Headers[_headerName]}, {value}";
+                HttpRequestReponse.Headers[_headerName] = CurrentCultureFormat($"{HttpRequestReponse.Headers[_headerName]}, {value}");
                 _headerAlreadyExist = false;
             }
             else

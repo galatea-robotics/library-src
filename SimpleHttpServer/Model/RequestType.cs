@@ -8,7 +8,7 @@ namespace SimpleHttpServer.Model
 {
     public enum RequestType
     {
-        TCP,
-        UDP
+        Tcp,
+        Udp
     }
 }

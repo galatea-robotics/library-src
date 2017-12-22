@@ -40,7 +40,10 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
-    <None Include="SimpleHttpServer.ruleset" />
+    <None Include="SimpleHttpServer.ruleset">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="SimpleHttpServer.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\Initializer.cs" />
@@ -65,6 +68,11 @@
     <Compile Include="Service\IHttpListener.cs" />
     <EmbeddedResource Include="Properties\SimpleHttpServer.rd.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Shim">
+      <HintPath>..\bin\UWP\Shim.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
@@ -81,6 +89,12 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <NoWarn>CA1811, 1811</NoWarn>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SimpleHttpServer.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
