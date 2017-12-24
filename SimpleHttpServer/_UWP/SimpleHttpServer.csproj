@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3CBB4B1D-8D32-414C-A1FE-E7D21C781733}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimpleHttpServer</RootNamespace>
+    <AssemblyName>SimpleHttpServer</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\UWP\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\UWP\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="..\SimpleHttpServer.ruleset">
+      <Link>SimpleHttpServer.ruleset</Link>
+    </None>
+    <None Include="..\SimpleHttpServer.snk">
+      <Link>SimpleHttpServer.snk</Link>
+    </None>
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Helper\Initializer.cs">
+      <Link>Helper\Initializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\Base\HttpHeaderBase.cs">
+      <Link>Model\Base\HttpHeaderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\Base\ParseControlBase.cs">
+      <Link>Model\Base\ParseControlBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\HttpReponse.cs">
+      <Link>Model\HttpReponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\HttpRequestReponse.cs">
+      <Link>Model\HttpRequestReponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IHttpCommon.cs">
+      <Link>Model\IHttpCommon.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IHttpHeaders.cs">
+      <Link>Model\IHttpHeaders.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IHttpRequest.cs">
+      <Link>Model\IHttpRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IHttpRequestReponse.cs">
+      <Link>Model\IHttpRequestReponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IHttpResponse.cs">
+      <Link>Model\IHttpResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\IParseControl.cs">
+      <Link>Model\IParseControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\ObservableHttpData.cs">
+      <Link>Model\ObservableHttpData.cs</Link>
+    </Compile>
+    <Compile Include="..\Model\RequestType.cs">
+      <Link>Model\RequestType.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\HttpParserDelegate.cs">
+      <Link>Parser\HttpParserDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\HttpStreamParser.cs">
+      <Link>Parser\HttpStreamParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Service\Base\ComposeBase.cs">
+      <Link>Service\Base\ComposeBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Service\HttpListener.cs">
+      <Link>Service\HttpListener.cs</Link>
+    </Compile>
+    <Compile Include="..\Service\HttpListener.Partial.cs">
+      <Link>Service\HttpListener.Partial.cs</Link>
+    </Compile>
+    <Compile Include="..\Service\IHttpListener.cs">
+      <Link>Service\IHttpListener.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Accord\Shim\_UWP\UWP.Shim.csproj">
+      <Project>{7305ecb7-7102-4e92-bab5-a2760c77be76}</Project>
+      <Name>UWP.Shim</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Analysis|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\UWP\Analysis\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>SimpleHttpServer.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <NoWarn>CA1811, 1811</NoWarn>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

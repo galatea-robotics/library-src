@@ -16,10 +16,10 @@ namespace SimpleHttpServer.Service
 {
     public partial class HttpListener : ComposeBase, IHttpListener, IDisposable
     {
-        private ITcpSocketListener _tcpListener;
-        private IUdpSocketReceiver _udpListener;
-        private readonly ITcpSocketListener _tcpResponseListener = new TcpSocketListener();
-        private readonly ITcpSocketListener _tcpRequestListener = new TcpSocketListener();
+        private ITcpSocketListener _tcpListener = new TcpSocketListener();
+        private IUdpSocketReceiver _udpListener = new UdpSocketReceiver();
+        private ITcpSocketListener _tcpResponseListener = new TcpSocketListener();
+        private ITcpSocketListener _tcpRequestListener = new TcpSocketListener();
 
         private IObservable<IHttpRequestReponse> UpdRequstReponseObservable =>
             _udpMultiCastListener.ObservableMessages
@@ -88,21 +88,30 @@ namespace SimpleHttpServer.Service
         private IObservable<IHttpRequest> _httpRequestObservable => Observable.Create<IHttpRequest>(
             obs =>
             {
-                var disp = TcpRequestResponseObservable
-                    .Merge(UpdRequstReponseObservable)
-                    .Where(x => x.MessageType == MessageType.Request)
-                    .Select(x => x as IHttpRequest)
-                    .Subscribe(
-                        req =>
-                        {
-                            obs.OnNext(req);
-                        },
-                        ex =>
-                        {
-                            obs.OnError(ex);
-                        },
-                        () => obs.OnCompleted());
-                return disp;
+                try
+                {
+                    var disp = TcpRequestResponseObservable
+                        .Merge(UpdRequstReponseObservable)
+                        .Where(x => x.MessageType == MessageType.Request)
+                        .Select(x => x as IHttpRequest)
+                        .Subscribe(
+                            req =>
+                            {
+                                obs.OnNext(req);
+                            },
+                            ex =>
+                            {
+                                obs.OnError(ex);
+                            },
+                            () => obs.OnCompleted());
+
+                    return disp;
+                }
+                catch(Exception ex)
+                {
+                    throw;
+                }
+
             }).Publish().RefCount();
 
         [Obsolete("Deprecated")]
@@ -137,8 +146,15 @@ namespace SimpleHttpServer.Service
             ICommunicationInterface communicationInterface = null,
             bool allowMultipleBindToSamePort = true)
         {
-            await
-                _tcpListener.StartListeningAsync(port, communicationInterface, allowMultipleBindToSamePort);
+            try
+            {
+                await _tcpListener.StartListeningAsync(port, communicationInterface, allowMultipleBindToSamePort);
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+                throw;
+            }
         }
 
         [Obsolete("Deprecated")]
@@ -168,12 +184,23 @@ namespace SimpleHttpServer.Service
             ICommunicationInterface communicationInterface = null,
             bool allowMultipleBindToSamePort = true)
         {
-            await
-                _udpMultiCastListener.JoinMulticastGroupAsync(
-                    ipAddr,
-                    port,
-                    communicationInterface,
-                    allowMultipleBindToSamePort);
+            if (communicationInterface == null && _communicationInterface !=null)
+            {
+                communicationInterface = _communicationInterface;
+            }
+            try
+            {
+                await
+                    _udpMultiCastListener.JoinMulticastGroupAsync(
+                        ipAddr,
+                        port,
+                        communicationInterface,
+                        allowMultipleBindToSamePort);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         [Obsolete("Deprecated")]
@@ -222,7 +249,6 @@ namespace SimpleHttpServer.Service
             await HttpSendReponseAsync(request, response);
         }
 
-
         #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
@@ -233,17 +259,19 @@ namespace SimpleHttpServer.Service
                 if (disposing)
                 {
                     // dispose managed state (managed objects).
-                    _tcpListener.Dispose();
-                    _tcpRequestListener.Dispose();
-                    _tcpResponseListener.Dispose();
-                    _udpListener.Dispose();
-                    _udpMultiCastListener.Dispose();
+                    _tcpListener?.Dispose();
+                    _tcpRequestListener?.Dispose();
+                    _tcpResponseListener?.Dispose();
+                    _udpListener?.Dispose();
+                    _udpMultiCastListener?.Dispose();
                 }
 
                 // free unmanaged resources (unmanaged objects) and override a finalizer below.
 
                 // set large fields to null.
                 _tcpListener = null;
+                _tcpRequestListener = null;
+                _tcpResponseListener = null;
                 _udpListener = null;
                 _udpMultiCastListener = null;
                 _udpMulticastRequestResponseObservable = null;
@@ -269,7 +297,7 @@ namespace SimpleHttpServer.Service
         }
         #endregion
 
-
+        protected ICommunicationInterface CommunicationInterface { get { return _communicationInterface; } }
     }
 
 }

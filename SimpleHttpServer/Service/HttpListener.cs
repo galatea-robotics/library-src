@@ -21,7 +21,7 @@ namespace SimpleHttpServer.Service
         private readonly IDictionary<int, IObservable<IHttpRequestReponse>> _tcpListenerPortToObservable = new Dictionary<int, IObservable<IHttpRequestReponse>>();
         private readonly IDictionary<int, IObservable<IHttpRequestReponse>> _udpReceiverPortToObservable = new Dictionary<int, IObservable<IHttpRequestReponse>>();
 
-        private IUdpSocketMulticastClient _udpMultiCastListener;
+        private UdpSocketMulticastClient _udpMultiCastListener = new UdpSocketMulticastClient();
 
         private readonly ICommunicationInterface _communicationInterface;
 
@@ -146,9 +146,9 @@ namespace SimpleHttpServer.Service
             ICommunicationInterface communicationInterface = null,
             bool allowMultipleBindToSamePort = false)
         {
-            _udpMultiCastListener = new UdpSocketMulticastClient();
+            //_udpMultiCastListener = new UdpSocketMulticastClient();
 
-            var observeUdpRequest = await _udpMultiCastListener.ObservableMulticastListener(
+            var observeUdpRequest = await ((IUdpSocketMulticastClient)_udpMultiCastListener).ObservableMulticastListener(
                 ipAddr,
                 port,
                 communicationInterface,
@@ -197,12 +197,8 @@ namespace SimpleHttpServer.Service
         {
         }
 
-        internal HttpListener(ICommunicationInterface communicationInterface) : this(communicationInterface, TimeSpan.FromSeconds(30))
-        {
-        }
-
         // ReSharper disable once MemberCanBePrivate.Global
-        internal HttpListener(ICommunicationInterface communicationInterface, TimeSpan timeout)
+        public HttpListener(ICommunicationInterface communicationInterface, TimeSpan timeout)
         {
             _communicationInterface = communicationInterface;
             Timeout = timeout;

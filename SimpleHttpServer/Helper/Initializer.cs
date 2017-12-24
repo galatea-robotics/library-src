@@ -17,13 +17,25 @@ namespace SimpleHttpServer.Helper
     [CLSCompliant(false)]
     public static class Initializer
     {
+        /*
+        public static ICommunicationInterface GetDefaultCommunicationsInterface(string ipAddress)
+        {
+            var allInterfaces = new CommunicationsInterface().GetAllInterfaces();
+
+            var comminicationInterface = allInterfaces.FirstOrDefault(x => x.IpAddress == ipAddress);
+            if (comminicationInterface == null) throw new ArgumentException($"Unable to locate any network communication interface with the ip address: {ipAddress}");
+
+            return comminicationInterface;
+        }
+        
         private static string _method;
         private static string _path;
 
         public static string Method { get { return _method; } }
         public static string Path { get { return _path; } }
-
-        internal static ICommunicationInterface GetDefaultCommunicationsInterface()
+         */
+         
+        public static ICommunicationInterface GetDefaultCommunicationsInterface()
         {
             var comm = new CommunicationsInterface();
             var allComms = comm.GetAllInterfaces();
@@ -32,6 +44,7 @@ namespace SimpleHttpServer.Helper
             return networkComm;
         }
 
+        /*
         public static async Task StartListener()
         {
             var networkComm = GetDefaultCommunicationsInterface();
@@ -82,14 +95,16 @@ namespace SimpleHttpServer.Helper
             // Remember to dispose of subscriber when done
             observeHttpRequests.Dispose();
         }
+         */
 
-        public static async Task<ListenerCommunicationInterface> GetListener(
+
+        public static async Task<dynamic> GetListener(
             string ipAddress, int port)
         {
             return await GetListener(ipAddress, port, default(TimeSpan));
         }
 
-        public static async Task<ListenerCommunicationInterface> GetListener(
+        public static async Task<dynamic> GetListener(
             string ipAddress, int port, TimeSpan timeout)
         {
             if (timeout == default(TimeSpan))
@@ -107,15 +122,17 @@ namespace SimpleHttpServer.Helper
             return await (GetListener(firstUsableInterface, port));
         }
 
-        public static async Task<ListenerCommunicationInterface> GetListener(
+        public static async Task<dynamic> GetListener(
             ICommunicationInterface communicationInterface, int port)
         {
             return await GetListener(communicationInterface, port, default(TimeSpan));
         }
 
-        public static async Task<ListenerCommunicationInterface> GetListener(
+        public static async Task<dynamic> GetListener(
             ICommunicationInterface communicationInterface, int port, TimeSpan timeout)
         {
+            dynamic result = null;
+
             if (timeout == default(TimeSpan))
             {
                 timeout = TimeSpan.FromSeconds(30);
@@ -130,25 +147,19 @@ namespace SimpleHttpServer.Helper
 
                 // Finalize
                 httpListenerResult = httpListener;
+
+                result = new System.Dynamic.ExpandoObject();
+                result.HttpListener = httpListenerResult;
+                result.CommunicationInterface = communicationInterface;
+
                 httpListener = null;
             }
             finally
             {
                 if (httpListener != null) httpListener.Dispose();
             }
-            return new ListenerCommunicationInterface(httpListenerResult, communicationInterface);
-        }
-    }
 
-    [CLSCompliant(false)]
-    public class ListenerCommunicationInterface
-    {
-        public ListenerCommunicationInterface(IHttpListener httpListener, ICommunicationInterface communicationInterface)
-        {
-            HttpListener = httpListener;
-            CommunicationInterface = communicationInterface;
+            return result;
         }
-        public IHttpListener HttpListener { get; }
-        public ICommunicationInterface CommunicationInterface { get; }
     }
 }
