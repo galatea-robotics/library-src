@@ -7,11 +7,12 @@ using SimpleHttpServer.Model;
 using System.Reactive;
 using SimpleHttpServer.Parser;
 
-namespace Galatea.Runtime.Net.Extensions
+namespace SimpleHttpServer.Parser
 {
-    internal static class ITcpSocketClientExtension
+    [CLSCompliant(false)]
+    public static class ITcpSocketClientExtension
     {
-        public static IHttpRequest GetRequest(this ITcpSocketClient tcpSocket, TimeSpan timeout)
+        public static IHttpRequest GethttpRequest(this ITcpSocketClient tcpSocket, TimeSpan timeout)
         {
             Stream stream = tcpSocket.ReadStream;
 

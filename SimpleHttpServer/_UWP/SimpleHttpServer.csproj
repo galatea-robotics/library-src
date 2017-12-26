@@ -87,6 +87,9 @@
     <Compile Include="..\Model\RequestType.cs">
       <Link>Model\RequestType.cs</Link>
     </Compile>
+    <Compile Include="..\Parser\Extensions\ITcpSocketClientExtension.cs">
+      <Link>Parser\Extensions\ITcpSocketClientExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Parser\HttpParserDelegate.cs">
       <Link>Parser\HttpParserDelegate.cs</Link>
     </Compile>
