@@ -9,8 +9,8 @@ namespace motion
 	using System.Drawing;
 	using System.Drawing.Imaging;
 
-	using AForge.Imaging;
-	using AForge.Imaging.Filters;
+	using Accord.Imaging;
+	using Accord.Imaging.Filters;
 
 	/// <summary>
 	/// MotionDetector3
@@ -21,7 +21,7 @@ namespace motion
 		private IFilter	pixellateFilter = new Pixellate( );
 		private Difference differenceFilter = new Difference( );
 		private Threshold thresholdFilter = new Threshold( 15 );
-		private Dilatation dilatationFilter = new Dilatation( );
+		//private Dilatation dilatationFilter = new Dilatation( );
 		private IFilter edgesFilter = new Edges( );
 		private Merge mergeFilter = new Merge( );
 
@@ -62,7 +62,7 @@ namespace motion
 
 			processingFilter2.Add( differenceFilter );
 			processingFilter2.Add( thresholdFilter );
-			processingFilter2.Add( dilatationFilter );
+			//processingFilter2.Add( dilatationFilter );
 		}
 
 		// Reset detector to initial state
@@ -116,9 +116,9 @@ namespace motion
             // apply difference filter
             differenceFilter.ApplyInPlace( bitmapData );
             // apply threshold filter
-            thresholdFilter.ApplyInPlace( bitmapData );
-            // apply dilatation filter
-            Bitmap tmpImage2 = dilatationFilter.Apply( bitmapData );
+            Bitmap tmpImage2 = thresholdFilter.Apply( bitmapData );
+            //// apply dilatation filter
+            //Bitmap tmpImage2 = dilatationFilter.Apply( bitmapData );
 
             // unlock temporary image
             tmpImage.UnlockBits( bitmapData );
