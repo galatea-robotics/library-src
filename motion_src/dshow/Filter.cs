@@ -33,9 +33,8 @@ namespace dshow
 		// Get moniker string of the moniker
 		private string GetMonikerString(UCOMIMoniker moniker)
 		{
-			string str;
-			moniker.GetDisplayName(null, null, out str);
-			return str;
+            moniker.GetDisplayName(null, null, out string str);
+            return str;
 		}
 
 		// Get filter name represented by the moniker
@@ -55,14 +54,17 @@ namespace dshow
 				object val = "";
 				int hr = bag.Read("FriendlyName", ref val, IntPtr.Zero);
 				if (hr != 0)
-					Marshal.ThrowExceptionForHR(hr);
+                {
+                    Marshal.ThrowExceptionForHR(hr);
+                }
 
-				// get it as string
-				string ret = val as string;
-				if ((ret == null) || (ret.Length < 1))
-					throw new ApplicationException();
+                // get it as string
+                if ((!(val is string ret)) || (ret.Length < 1))
+                {
+                    throw new ApplicationException();
+                }
 
-				return ret;
+                return ret;
 			}	
 			catch (Exception)
 			{
@@ -83,13 +85,12 @@ namespace dshow
 		// Get filter name represented by the moniker string
 		private string GetName(string monikerString)
 		{
-			UCOMIBindCtx bindCtx = null;
-			UCOMIMoniker moniker = null;
-			String name = "";
+            UCOMIMoniker moniker = null;
+            String name = "";
 			int n = 0;
 
 			// create bind context
-			if (Win32.CreateBindCtx(0, out bindCtx) == 0)
+			if (Win32.CreateBindCtx(0, out UCOMIBindCtx bindCtx) == 0)
 			{
 				// convert moniker`s string to a moniker
 				if (Win32.MkParseDisplayName(bindCtx, monikerString, ref n, out moniker) == 0)

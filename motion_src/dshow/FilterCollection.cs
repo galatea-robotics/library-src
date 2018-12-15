@@ -40,26 +40,25 @@ namespace dshow
 				if (hr != 0)
 					throw new ApplicationException("No devices of the category");
 
-				// Collect all filters
-				int n;
-				while (true)
-				{
-					// Get next filter
-					hr = enumMon.Next(1, devMon, out n);
-					if ((hr != 0) || (devMon[0] == null))
-						break;
+                // Collect all filters
+                while (true)
+                {
+                    // Get next filter
+                    hr = enumMon.Next(1, devMon, out int n);
+                    if ((hr != 0) || (devMon[0] == null))
+                        break;
 
-					// Add the filter
-					Filter filter = new Filter(devMon[0]);
-					InnerList.Add(filter);
+                    // Add the filter
+                    Filter filter = new Filter(devMon[0]);
+                    InnerList.Add(filter);
 
-					// Release COM object
-					Marshal.ReleaseComObject(devMon[0]);
-					devMon[0] = null;
-				}
+                    // Release COM object
+                    Marshal.ReleaseComObject(devMon[0]);
+                    devMon[0] = null;
+                }
 
-				// Sort the collection
-				InnerList.Sort();
+                // Sort the collection
+                InnerList.Sort();
 			}
 
 			finally

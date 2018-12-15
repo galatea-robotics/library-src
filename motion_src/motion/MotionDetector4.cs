@@ -18,8 +18,8 @@ namespace motion
 	/// </summary>
 	public class MotionDetector4 : IMotionDetector
 	{
-		private IFilter	grayscaleFilter = new GrayscaleBT709( );
-		private IFilter	pixellateFilter = new Pixellate( );
+		private readonly IFilter	grayscaleFilter = new GrayscaleBT709( );
+		private readonly IFilter	pixellateFilter = new Pixellate( );
 		private Difference differenceFilter = new Difference( );
 		private Threshold thresholdFilter = new Threshold( 15 );
 		private MoveTowards moveTowardsFilter = new MoveTowards( );
@@ -31,7 +31,7 @@ namespace motion
         private BitmapData bitmapData;
         private int counter = 0;
 
-		private Bitmap[]	numbersBitmaps = new Bitmap[9];
+		private readonly Bitmap[]	numbersBitmaps = new Bitmap[9];
 
 		private bool	calculateMotionLevel = false;
 		private int		width;	// image width

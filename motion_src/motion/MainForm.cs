@@ -23,7 +23,7 @@ namespace motion
         // statistics
         private const int statLength = 15;
         private int statIndex = 0, statReady = 0;
-        private int[] statCount = new int[statLength];
+        private readonly int[] statCount = new int[statLength];
 
         private IMotionDetector detector = new MotionDetector3Optimized( );
         private int detectorType = 4;
@@ -151,25 +151,25 @@ namespace motion
             this.openFileItem.Index = 0;
             this.openFileItem.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.openFileItem.Text = "&Open";
-            this.openFileItem.Click += new System.EventHandler( this.openFileItem_Click );
+            this.openFileItem.Click += new System.EventHandler( this.OpenFileItem_Click );
             // 
             // openURLFileItem
             // 
             this.openURLFileItem.Index = 1;
             this.openURLFileItem.Text = "Open JPEG &URL";
-            this.openURLFileItem.Click += new System.EventHandler( this.openURLFileItem_Click );
+            this.openURLFileItem.Click += new System.EventHandler( this.OpenURLFileItem_Click );
             // 
             // openMJEPGFileItem
             // 
             this.openMJEPGFileItem.Index = 2;
             this.openMJEPGFileItem.Text = "Open M&JPEG URL";
-            this.openMJEPGFileItem.Click += new System.EventHandler( this.openMJEPGFileItem_Click );
+            this.openMJEPGFileItem.Click += new System.EventHandler( this.OpenMJEPGFileItem_Click );
             // 
             // openLocalFileItem
             // 
             this.openLocalFileItem.Index = 3;
             this.openLocalFileItem.Text = "Open &Local Device";
-            this.openLocalFileItem.Click += new System.EventHandler( this.openLocalFileItem_Click );
+            this.openLocalFileItem.Click += new System.EventHandler( this.OpenLocalFileItem_Click );
             // 
             // menuItem1
             // 
@@ -180,7 +180,7 @@ namespace motion
             // 
             this.exitFileItem.Index = 5;
             this.exitFileItem.Text = "E&xit";
-            this.exitFileItem.Click += new System.EventHandler( this.exitFileItem_Click );
+            this.exitFileItem.Click += new System.EventHandler( this.ExitFileItem_Click );
             // 
             // motionItem
             // 
@@ -197,13 +197,13 @@ namespace motion
             this.detectorSaveItem,
             this.motionAlarmItem} );
             this.motionItem.Text = "&Motion";
-            this.motionItem.Popup += new System.EventHandler( this.motionItem_Popup );
+            this.motionItem.Popup += new System.EventHandler( this.MotionItem_Popup );
             // 
             // noneMotionItem
             // 
             this.noneMotionItem.Index = 0;
             this.noneMotionItem.Text = "&None";
-            this.noneMotionItem.Click += new System.EventHandler( this.noneMotionItem_Click );
+            this.noneMotionItem.Click += new System.EventHandler( this.NoneMotionItem_Click );
             // 
             // menuItem2
             // 
@@ -214,31 +214,31 @@ namespace motion
             // 
             this.detector1MotionItem.Index = 2;
             this.detector1MotionItem.Text = "Detector &1";
-            this.detector1MotionItem.Click += new System.EventHandler( this.detector1MotionItem_Click );
+            this.detector1MotionItem.Click += new System.EventHandler( this.Detector1MotionItem_Click );
             // 
             // detector2MotionItem
             // 
             this.detector2MotionItem.Index = 3;
             this.detector2MotionItem.Text = "Detector &2";
-            this.detector2MotionItem.Click += new System.EventHandler( this.detector2MotionItem_Click );
+            this.detector2MotionItem.Click += new System.EventHandler( this.Detector2MotionItem_Click );
             // 
             // detector3MotionItem
             // 
             this.detector3MotionItem.Index = 4;
             this.detector3MotionItem.Text = "Detector &3";
-            this.detector3MotionItem.Click += new System.EventHandler( this.detector3MotionItem_Click );
+            this.detector3MotionItem.Click += new System.EventHandler( this.Detector3MotionItem_Click );
             // 
             // detector3OptimizedMotionItem
             // 
             this.detector3OptimizedMotionItem.Index = 5;
             this.detector3OptimizedMotionItem.Text = "Detector 3 - Optimized";
-            this.detector3OptimizedMotionItem.Click += new System.EventHandler( this.detector3OptimizedMotionItem_Click );
+            this.detector3OptimizedMotionItem.Click += new System.EventHandler( this.Detector3OptimizedMotionItem_Click );
             // 
             // detector4MotionItem
             // 
             this.detector4MotionItem.Index = 6;
             this.detector4MotionItem.Text = "Detector &4";
-            this.detector4MotionItem.Click += new System.EventHandler( this.detector4MotionItem_Click );
+            this.detector4MotionItem.Click += new System.EventHandler( this.Detector4MotionItem_Click );
             // 
             // menuItem3
             // 
@@ -249,14 +249,14 @@ namespace motion
             // 
             this.detectorSaveItem.Index = 8;
             this.detectorSaveItem.Text = "&Save on motion";
-            this.detectorSaveItem.Click += new System.EventHandler( this.detectorSaveItem_Click );
+            this.detectorSaveItem.Click += new System.EventHandler( this.DetectorSaveItem_Click );
             // 
             // motionAlarmItem
             // 
             this.motionAlarmItem.Checked = true;
             this.motionAlarmItem.Index = 9;
             this.motionAlarmItem.Text = "&Enable motion alarm";
-            this.motionAlarmItem.Click += new System.EventHandler( this.motionAlarmItem_Click );
+            this.motionAlarmItem.Click += new System.EventHandler( this.MotionAlarmItem_Click );
             // 
             // helpItem
             // 
@@ -269,7 +269,7 @@ namespace motion
             // 
             this.aboutHelpItem.Index = 0;
             this.aboutHelpItem.Text = "&About";
-            this.aboutHelpItem.Click += new System.EventHandler( this.aboutHelpItem_Click );
+            this.aboutHelpItem.Click += new System.EventHandler( this.AboutHelpItem_Click );
             // 
             // ofd
             // 
@@ -280,7 +280,7 @@ namespace motion
             // 
             this.timer.Interval = 1000;
             this.timer.SynchronizingObject = this;
-            this.timer.Elapsed += new System.Timers.ElapsedEventHandler( this.timer_Elapsed );
+            this.timer.Elapsed += new System.Timers.ElapsedEventHandler( this.Timer_Elapsed );
             // 
             // statusBar
             // 
@@ -352,13 +352,13 @@ namespace motion
         }
 
         // Close the main form
-        private void exitFileItem_Click( object sender, System.EventArgs e )
+        private void ExitFileItem_Click( object sender, System.EventArgs e )
         {
             this.Close( );
         }
 
         // On "Help->About"
-        private void aboutHelpItem_Click( object sender, System.EventArgs e )
+        private void AboutHelpItem_Click( object sender, System.EventArgs e )
         {
             AboutForm form = new AboutForm( );
 
@@ -366,13 +366,15 @@ namespace motion
         }
 
         // Open file
-        private void openFileItem_Click( object sender, System.EventArgs e )
+        private void OpenFileItem_Click( object sender, System.EventArgs e )
         {
             if ( ofd.ShowDialog( ) == DialogResult.OK )
             {
                 // create video source
-                VideoFileSource fileSource = new VideoFileSource( );
-                fileSource.VideoSource = ofd.FileName;
+                VideoFileSource fileSource = new VideoFileSource
+                {
+                    VideoSource = ofd.FileName
+                };
 
                 // open it
                 OpenVideoSource( fileSource );
@@ -380,24 +382,27 @@ namespace motion
         }
 
         // Open URL
-        private void openURLFileItem_Click( object sender, System.EventArgs e )
+        private void OpenURLFileItem_Click( object sender, System.EventArgs e )
         {
-            URLForm form = new URLForm( );
-
-            form.Description = "Enter URL of an updating JPEG from a web camera:";
-            form.URLs = new string[]
-				{
-					"http://61.220.38.10/axis-cgi/jpg/image.cgi?camera=1",
-					"http://212.98.46.120/axis-cgi/jpg/image.cgi?resolution=352x240",
-					"http://webcam.mmhk.cz/axis-cgi/jpg/image.cgi?resolution=320x240",
-					"http://195.243.185.195/axis-cgi/jpg/image.cgi?camera=1"
-				};
+            URLForm form = new URLForm
+            {
+                Description = "Enter URL of an updating JPEG from a web camera:",
+                URLs = new string[]
+                {
+                    "http://61.220.38.10/axis-cgi/jpg/image.cgi?camera=1",
+                    "http://212.98.46.120/axis-cgi/jpg/image.cgi?resolution=352x240",
+                    "http://webcam.mmhk.cz/axis-cgi/jpg/image.cgi?resolution=320x240",
+                    "http://195.243.185.195/axis-cgi/jpg/image.cgi?camera=1"
+                }
+            };
 
             if ( form.ShowDialog( this ) == DialogResult.OK )
             {
                 // create video source
-                JPEGStream jpegSource = new JPEGStream( );
-                jpegSource.VideoSource = form.URL;
+                JPEGStream jpegSource = new JPEGStream
+                {
+                    VideoSource = form.URL
+                };
 
                 // open it
                 OpenVideoSource( jpegSource );
@@ -405,24 +410,27 @@ namespace motion
         }
 
         // Open MJPEG URL
-        private void openMJEPGFileItem_Click( object sender, System.EventArgs e )
+        private void OpenMJEPGFileItem_Click( object sender, System.EventArgs e )
         {
-            URLForm form = new URLForm( );
-
-            form.Description = "Enter URL of an MJPEG video stream:";
-            form.URLs = new string[]
-				{
-					"http://129.186.47.239/axis-cgi/mjpg/video.cgi?resolution=352x240",
-					"http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=3",
-					"http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=4",
+            URLForm form = new URLForm
+            {
+                Description = "Enter URL of an MJPEG video stream:",
+                URLs = new string[]
+                {
+                    "http://129.186.47.239/axis-cgi/mjpg/video.cgi?resolution=352x240",
+                    "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=3",
+                    "http://195.243.185.195/axis-cgi/mjpg/video.cgi?camera=4",
                     "http://chipmunk.uvm.edu/cgi-bin/webcam/nph-update.cgi?dummy=garb"
-				};
+                }
+            };
 
             if ( form.ShowDialog( this ) == DialogResult.OK )
             {
                 // create video source
-                MJPEGStream mjpegSource = new MJPEGStream( );
-                mjpegSource.VideoSource = form.URL;
+                MJPEGStream mjpegSource = new MJPEGStream
+                {
+                    VideoSource = form.URL
+                };
 
                 // open it
                 OpenVideoSource( mjpegSource );
@@ -430,15 +438,17 @@ namespace motion
         }
 
         // Open local capture device
-        private void openLocalFileItem_Click( object sender, System.EventArgs e )
+        private void OpenLocalFileItem_Click( object sender, System.EventArgs e )
         {
             CaptureDeviceForm form = new CaptureDeviceForm( );
 
             if ( form.ShowDialog( this ) == DialogResult.OK )
             {
                 // create video source
-                CaptureDevice localSource = new CaptureDevice( );
-                localSource.VideoSource = CaptureDeviceForm.Device;
+                CaptureDevice localSource = new CaptureDevice
+                {
+                    VideoSource = CaptureDeviceForm.Device
+                };
 
                 // open it
                 OpenVideoSource( localSource );
@@ -472,8 +482,8 @@ namespace motion
             statIndex = statReady = 0;
 
             // set event handlers
-            camera.NewFrame += new EventHandler( camera_NewFrame );
-            camera.Alarm += new EventHandler( camera_Alarm );
+            camera.NewFrame += new EventHandler( Camera_NewFrame );
+            camera.Alarm += new EventHandler( Camera_Alarm );
 
             // start timer
             timer.Start( );
@@ -511,7 +521,7 @@ namespace motion
         }
 
         // On timer event - gather statistic
-        private void timer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
+        private void Timer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
         {
             Camera camera = cameraWindow.Camera;
 
@@ -552,7 +562,7 @@ namespace motion
         }
 
         // Remove any motion detectors
-        private void noneMotionItem_Click( object sender, System.EventArgs e )
+        private void NoneMotionItem_Click( object sender, System.EventArgs e )
         {
             detector = null;
             detectorType = 0;
@@ -560,7 +570,7 @@ namespace motion
         }
 
         // Select detector 1
-        private void detector1MotionItem_Click( object sender, System.EventArgs e )
+        private void Detector1MotionItem_Click( object sender, System.EventArgs e )
         {
             detector = new MotionDetector1( );
             detectorType = 1;
@@ -568,7 +578,7 @@ namespace motion
         }
 
         // Select detector 2
-        private void detector2MotionItem_Click( object sender, System.EventArgs e )
+        private void Detector2MotionItem_Click( object sender, System.EventArgs e )
         {
             detector = new MotionDetector2( );
             detectorType = 2;
@@ -576,7 +586,7 @@ namespace motion
         }
 
         // Select detector 3
-        private void detector3MotionItem_Click( object sender, System.EventArgs e )
+        private void Detector3MotionItem_Click( object sender, System.EventArgs e )
         {
             detector = new MotionDetector3( );
             detectorType = 3;
@@ -584,7 +594,7 @@ namespace motion
         }
 
         // Select detector 3 - optimized
-        private void detector3OptimizedMotionItem_Click( object sender, System.EventArgs e )
+        private void Detector3OptimizedMotionItem_Click( object sender, System.EventArgs e )
         {
             detector = new MotionDetector3Optimized( );
             detectorType = 4;
@@ -592,7 +602,7 @@ namespace motion
         }
 
         // Select detector 4
-        private void detector4MotionItem_Click( object sender, System.EventArgs e )
+        private void Detector4MotionItem_Click( object sender, System.EventArgs e )
         {
             detector = new MotionDetector4( );
             detectorType = 5;
@@ -623,7 +633,7 @@ namespace motion
         }
 
         // On "Motion" menu item popup
-        private void motionItem_Popup( object sender, System.EventArgs e )
+        private void MotionItem_Popup( object sender, System.EventArgs e )
         {
             MenuItem[] items = new MenuItem[]
 			{
@@ -639,14 +649,14 @@ namespace motion
         }
 
         // On alarm
-        private void camera_Alarm( object sender, System.EventArgs e )
+        private void Camera_Alarm( object sender, System.EventArgs e )
         {
             // save movie for 5 seconds after motion stops
             intervalsToSave = (int) ( 5 * ( 1000 / timer.Interval ) );
         }
 
         // On new frame
-        private void camera_NewFrame( object sender, System.EventArgs e )
+        private void Camera_NewFrame( object sender, System.EventArgs e )
         {
             if ( ( intervalsToSave != 0 ) && ( saveOnMotion == true ) )
             {
@@ -685,7 +695,7 @@ namespace motion
         }
 
         // Switch saving mode
-        private void detectorSaveItem_Click( object sender, System.EventArgs e )
+        private void DetectorSaveItem_Click( object sender, System.EventArgs e )
         {
             // change saving mode
             saveOnMotion = !saveOnMotion;
@@ -695,7 +705,7 @@ namespace motion
         }
 
         // Enable/disable motion alaram
-        private void motionAlarmItem_Click( object sender, System.EventArgs e )
+        private void MotionAlarmItem_Click( object sender, System.EventArgs e )
         {
             motionAlarmItem.Checked = !motionAlarmItem.Checked;
 

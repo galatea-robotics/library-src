@@ -23,7 +23,7 @@ namespace motion
 		private int		width = -1, height = -1;
 
 		// alarm level
-		private double	alarmLevel = 0.005;
+		private readonly double	alarmLevel = 0.005;
 
 		//
 		public event EventHandler	NewFrame;
@@ -73,7 +73,7 @@ namespace motion
 		{
 			this.videoSource = source;
 			this.motionDetecotor = detector;
-			videoSource.NewFrame += new CameraEventHandler( video_NewFrame );
+			videoSource.NewFrame += new CameraEventHandler( Video_NewFrame );
 		}
 
 		// Start video source
@@ -135,7 +135,7 @@ namespace motion
 		}
 
 		// On new frame
-		private void video_NewFrame( object sender, CameraEventArgs e )
+		private void Video_NewFrame( object sender, CameraEventArgs e )
 		{
 			try
 			{
@@ -178,9 +178,8 @@ namespace motion
 				Monitor.Exit( this );
 			}
 
-			// notify client
-			if ( NewFrame != null )
-				NewFrame( this, new EventArgs( ) );
-		}
+            // notify client
+            NewFrame?.Invoke(this, new EventArgs());
+        }
 	}
 }

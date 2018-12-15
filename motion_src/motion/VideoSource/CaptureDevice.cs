@@ -102,11 +102,14 @@ namespace VideoSource
 
 				// create events
 				stopEvent	= new ManualResetEvent(false);
-				
-				// create and start new thread
-				thread = new Thread(new ThreadStart(WorkerThread));
-				thread.Name = source;
-				thread.Start();
+
+                // create and start new thread
+                thread = new Thread(new ThreadStart(WorkerThread))
+                {
+                    Name = source
+                };
+
+                thread.Start();
 			}
 		}
 
@@ -181,26 +184,23 @@ namespace VideoSource
 				// create filter graph
 				graphObj = Activator.CreateInstance(srvType);
 				graph = (IGraphBuilder) graphObj;
+                int n = 0;
 
-				// ----
-				UCOMIBindCtx bindCtx = null;
-				UCOMIMoniker moniker = null;
-				int n = 0;
-
-				// create bind context
-				if (Win32.CreateBindCtx(0, out bindCtx) == 0)
+                // create bind context
+                if (Win32.CreateBindCtx(0, out UCOMIBindCtx bindCtx) == 0)
 				{
-					// convert moniker`s string to a moniker
-					if (Win32.MkParseDisplayName(bindCtx, source, ref n, out moniker) == 0)
-					{
-						// get device base filter
-						Guid filterId = typeof(IBaseFilter).GUID;
-						moniker.BindToObject(null, null, ref filterId, out sourceObj);
+                    // ----
+                    // convert moniker`s string to a moniker
+                    if (Win32.MkParseDisplayName(bindCtx, source, ref n, out UCOMIMoniker moniker) == 0)
+                    {
+                        // get device base filter
+                        Guid filterId = typeof(IBaseFilter).GUID;
+                        moniker.BindToObject(null, null, ref filterId, out sourceObj);
 
-						Marshal.ReleaseComObject(moniker);
-						moniker = null;
-					}
-					Marshal.ReleaseComObject(bindCtx);
+                        Marshal.ReleaseComObject(moniker);
+                        moniker = null;
+                    }
+                    Marshal.ReleaseComObject(bindCtx);
 					bindCtx = null;
 				}
 				// ----
@@ -224,11 +224,14 @@ namespace VideoSource
 				graph.AddFilter(sourceBase, "source");
 				graph.AddFilter(grabberBase, "grabber");
 
-				// set media type
-				AMMediaType mt = new AMMediaType();
-				mt.majorType = MediaType.Video;
-				mt.subType = MediaSubType.RGB24;
-				sg.SetMediaType(mt);
+                // set media type
+                AMMediaType mt = new AMMediaType
+                {
+                    majorType = MediaType.Video,
+                    subType = MediaSubType.RGB24
+                };
+
+                sg.SetMediaType(mt);
 
 				// connect pins
 				if (graph.Connect(DSTools.GetOutPin(sourceBase, 0), DSTools.GetInPin(grabberBase, 0)) < 0)

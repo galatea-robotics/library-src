@@ -135,11 +135,14 @@ namespace VideoSource
 
 				// create events
 				stopEvent	= new ManualResetEvent(false);
-				
-				// create and start new thread
-				thread = new Thread(new ThreadStart(WorkerThread));
-				thread.Name = source;
-				thread.Start();
+
+                // create and start new thread
+                thread = new Thread(new ThreadStart(WorkerThread))
+                {
+                    Name = source
+                };
+
+                thread.Start();
 			}
 		}
 

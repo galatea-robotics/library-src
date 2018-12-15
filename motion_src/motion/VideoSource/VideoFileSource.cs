@@ -99,11 +99,14 @@ namespace VideoSource
 
 				// create events
 				stopEvent	= new ManualResetEvent(false);
-				
-				// create and start new thread
-				thread = new Thread(new ThreadStart(WorkerThread));
-				thread.Name = source;
-				thread.Start();
+
+                // create and start new thread
+                thread = new Thread(new ThreadStart(WorkerThread))
+                {
+                    Name = source
+                };
+
+                thread.Start();
 			}
 		}
 
@@ -174,11 +177,10 @@ namespace VideoSource
 					if (stopEvent.WaitOne(0, false))
 						break;
 
-					if (NewFrame != null)
-						NewFrame(this, new CameraEventArgs(bmp));
+                    NewFrame?.Invoke(this, new CameraEventArgs(bmp));
 
-					// free image
-					bmp.Dispose();
+                    // free image
+                    bmp.Dispose();
 
 					// end time
 					TimeSpan	span = DateTime.Now.Subtract(start);

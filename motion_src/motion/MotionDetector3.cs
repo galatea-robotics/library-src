@@ -17,8 +17,8 @@ namespace motion
 	/// </summary>
 	public class MotionDetector3 : IMotionDetector
 	{
-		private IFilter	grayscaleFilter = new GrayscaleBT709( );
-		private IFilter	pixellateFilter = new Pixellate( );
+		private readonly IFilter	grayscaleFilter = new GrayscaleBT709( );
+		private readonly IFilter	pixellateFilter = new Pixellate( );
 		private Difference differenceFilter = new Difference( );
 		private Threshold thresholdFilter = new Threshold( 15 );
 		//private Dilatation dilatationFilter = new Dilatation( );

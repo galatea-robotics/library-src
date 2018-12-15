@@ -102,11 +102,14 @@ namespace VideoSource
 
 				// create events
 				stopEvent	= new ManualResetEvent(false);
-				
-				// create and start new thread
-				thread = new Thread(new ThreadStart(WorkerThread));
-				thread.Name = source;
-				thread.Start();
+
+                // create and start new thread
+                thread = new Thread(new ThreadStart(WorkerThread))
+                {
+                    Name = source
+                };
+
+                thread.Start();
 			}
 		}
 
@@ -175,147 +178,148 @@ namespace VideoSource
 			IMediaControl	mc = null;
 			IMediaEventEx	mediaEvent = null;
 
-			int	code, param1, param2;
+            while ((!failed) && (!stopEvent.WaitOne(0, true)))
+            {
+                try
+                {
+                    // Get type for filter graph
+                    Type srvType = Type.GetTypeFromCLSID(Clsid.FilterGraph);
+                    if (srvType == null)
+                        throw new ApplicationException("Failed creating filter graph");
 
-			while ((!failed) && (!stopEvent.WaitOne(0, true)))
-			{
-				try
-				{
-					// Get type for filter graph
-					Type srvType = Type.GetTypeFromCLSID(Clsid.FilterGraph);
-					if (srvType == null)
-						throw new ApplicationException("Failed creating filter graph");
+                    // create filter graph
+                    graphObj = Activator.CreateInstance(srvType);
+                    graph = (IGraphBuilder)graphObj;
 
-					// create filter graph
-					graphObj = Activator.CreateInstance(srvType);
-					graph = (IGraphBuilder) graphObj;
+                    // Get type for windows media source filter
+                    srvType = Type.GetTypeFromCLSID(Clsid.WindowsMediaSource);
+                    if (srvType == null)
+                        throw new ApplicationException("Failed creating WM source");
 
-					// Get type for windows media source filter
-					srvType = Type.GetTypeFromCLSID(Clsid.WindowsMediaSource);
-					if (srvType == null)
-						throw new ApplicationException("Failed creating WM source");
+                    // create windows media source filter
+                    sourceObj = Activator.CreateInstance(srvType);
+                    sourceBase = (IBaseFilter)sourceObj;
 
-					// create windows media source filter
-					sourceObj = Activator.CreateInstance(srvType);
-					sourceBase = (IBaseFilter) sourceObj;
+                    // Get type for sample grabber
+                    srvType = Type.GetTypeFromCLSID(Clsid.SampleGrabber);
+                    if (srvType == null)
+                        throw new ApplicationException("Failed creating sample grabber");
 
-					// Get type for sample grabber
-					srvType = Type.GetTypeFromCLSID(Clsid.SampleGrabber);
-					if (srvType == null)
-						throw new ApplicationException("Failed creating sample grabber");
+                    // create sample grabber
+                    grabberObj = Activator.CreateInstance(srvType);
+                    sg = (ISampleGrabber)grabberObj;
+                    grabberBase = (IBaseFilter)grabberObj;
 
-					// create sample grabber
-					grabberObj = Activator.CreateInstance(srvType);
-					sg = (ISampleGrabber) grabberObj;
-					grabberBase = (IBaseFilter) grabberObj;
+                    // add source filter to graph
+                    graph.AddFilter(sourceBase, "source");
+                    graph.AddFilter(grabberBase, "grabber");
 
-					// add source filter to graph
-					graph.AddFilter(sourceBase, "source");
-					graph.AddFilter(grabberBase, "grabber");
+                    // set media type
+                    AMMediaType mt = new AMMediaType
+                    {
+                        majorType = MediaType.Video,
+                        subType = MediaSubType.RGB24
+                    };
 
-					// set media type
-					AMMediaType mt = new AMMediaType();
-					mt.majorType = MediaType.Video;
-					mt.subType = MediaSubType.RGB24;
-					sg.SetMediaType(mt);
+                    sg.SetMediaType(mt);
 
-					// load file
-					fileSource = (IFileSourceFilter) sourceObj;
-					fileSource.Load(this.source, null);
+                    // load file
+                    fileSource = (IFileSourceFilter)sourceObj;
+                    fileSource.Load(this.source, null);
 
-					// connect pins
-					if (graph.Connect(DSTools.GetOutPin(sourceBase, 0), DSTools.GetInPin(grabberBase, 0)) < 0)
-						throw new ApplicationException("Failed connecting filters");
+                    // connect pins
+                    if (graph.Connect(DSTools.GetOutPin(sourceBase, 0), DSTools.GetInPin(grabberBase, 0)) < 0)
+                        throw new ApplicationException("Failed connecting filters");
 
-					// get media type
-					if (sg.GetConnectedMediaType(mt) == 0)
-					{
-						VideoInfoHeader vih = (VideoInfoHeader) Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
+                    // get media type
+                    if (sg.GetConnectedMediaType(mt) == 0)
+                    {
+                        VideoInfoHeader vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
 
-						grabber.Width = vih.BmiHeader.Width;
-						grabber.Height = vih.BmiHeader.Height;
-						mt.Dispose();
-					}
+                        grabber.Width = vih.BmiHeader.Width;
+                        grabber.Height = vih.BmiHeader.Height;
+                        mt.Dispose();
+                    }
 
-					// render
-					graph.Render(DSTools.GetOutPin(grabberBase, 0));
+                    // render
+                    graph.Render(DSTools.GetOutPin(grabberBase, 0));
 
-					//
-					sg.SetBufferSamples(false);
-					sg.SetOneShot(false);
-					sg.SetCallback(grabber, 1);
+                    //
+                    sg.SetBufferSamples(false);
+                    sg.SetOneShot(false);
+                    sg.SetCallback(grabber, 1);
 
-					// window
-					IVideoWindow win = (IVideoWindow) graphObj;
-					win.put_AutoShow(false);
-					win = null;
+                    // window
+                    IVideoWindow win = (IVideoWindow)graphObj;
+                    win.put_AutoShow(false);
+                    win = null;
 
-					// get events interface
-					mediaEvent = (IMediaEventEx) graphObj;
+                    // get events interface
+                    mediaEvent = (IMediaEventEx)graphObj;
 
-					// get media control
-					mc = (IMediaControl) graphObj;
+                    // get media control
+                    mc = (IMediaControl)graphObj;
 
-					// run
-					mc.Run();
+                    // run
+                    mc.Run();
 
-					while (!stopEvent.WaitOne(0, true))
-					{
-						Thread.Sleep(100);
+                    while (!stopEvent.WaitOne(0, true))
+                    {
+                        Thread.Sleep(100);
 
-						// get an event
-						if (mediaEvent.GetEvent(out code, out param1, out param2, 0) == 0)
-						{
-							// release params
-							mediaEvent.FreeEventParams(code, param1, param2);
+                        // get an event
+                        if (mediaEvent.GetEvent(out int code, out int param1, out int param2, 0) == 0)
+                        {
+                            // release params
+                            mediaEvent.FreeEventParams(code, param1, param2);
 
-							//
-							if (code == (int) EventCode.Complete)
-							{
-								System.Diagnostics.Debug.WriteLine("completed");
-								break;
-							}
-						}
-					}
+                            //
+                            if (code == (int)EventCode.Complete)
+                            {
+                                System.Diagnostics.Debug.WriteLine("completed");
+                                break;
+                            }
+                        }
+                    }
 
-					mc.StopWhenReady();
-				}
-					// catch any exceptions
-				catch (Exception e)
-				{
-					System.Diagnostics.Debug.WriteLine("----: " + e.Message);
-					failed = true;
-				}
-					// finalization block
-				finally
-				{
-					// release all objects
-					mediaEvent = null;
-					mc = null;
-					fileSource = null;
-					graph = null;
-					sourceBase = null;
-					grabberBase = null;
-					sg = null;
+                    mc.StopWhenReady();
+                }
+                // catch any exceptions
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("----: " + e.Message);
+                    failed = true;
+                }
+                // finalization block
+                finally
+                {
+                    // release all objects
+                    mediaEvent = null;
+                    mc = null;
+                    fileSource = null;
+                    graph = null;
+                    sourceBase = null;
+                    grabberBase = null;
+                    sg = null;
 
-					if (graphObj != null)
-					{
-						Marshal.ReleaseComObject(graphObj);
-						graphObj = null;
-					}
-					if (sourceObj != null)
-					{
-						Marshal.ReleaseComObject(sourceObj);
-						sourceObj = null;
-					}
-					if (grabberObj != null)
-					{
-						Marshal.ReleaseComObject(grabberObj);
-						grabberObj = null;
-					}
-				}
-			}
-		}
+                    if (graphObj != null)
+                    {
+                        Marshal.ReleaseComObject(graphObj);
+                        graphObj = null;
+                    }
+                    if (sourceObj != null)
+                    {
+                        Marshal.ReleaseComObject(sourceObj);
+                        sourceObj = null;
+                    }
+                    if (grabberObj != null)
+                    {
+                        Marshal.ReleaseComObject(grabberObj);
+                        grabberObj = null;
+                    }
+                }
+            }
+        }
 
 		// new frame
 		protected void OnNewFrame(Bitmap image)

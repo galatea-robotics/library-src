@@ -16,7 +16,7 @@ namespace VideoSource
 	/// </summary>
 	public class CameraEventArgs : EventArgs
 	{
-		private System.Drawing.Bitmap bmp;
+		private readonly System.Drawing.Bitmap bmp;
 
 		// Constructor
 		public CameraEventArgs(System.Drawing.Bitmap bmp)

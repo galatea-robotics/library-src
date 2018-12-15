@@ -125,30 +125,32 @@ namespace Tiger.Video.VFW
 			this.width = width;
 			this.height = height;
 
-			// describe new stream
-			Win32.AVISTREAMINFO info = new Win32.AVISTREAMINFO();
+            // describe new stream
+            Win32.AVISTREAMINFO info = new Win32.AVISTREAMINFO
+            {
+                fccType = Win32.mmioFOURCC("vids"),
+                fccHandler = Win32.mmioFOURCC(codec),
+                dwScale = 1,
+                dwRate = rate,
+                dwSuggestedBufferSize = stride * height
+            };
 
-			info.fccType	= Win32.mmioFOURCC("vids");
-			info.fccHandler	= Win32.mmioFOURCC(codec);
-			info.dwScale	= 1;
-			info.dwRate		= rate;
-			info.dwSuggestedBufferSize = stride * height;
-
-			// create stream
-			if (Win32.AVIFileCreateStream(file, out stream, ref info) != 0)
+            // create stream
+            if (Win32.AVIFileCreateStream(file, out stream, ref info) != 0)
 				throw new ApplicationException("Failed creating stream");
 
-			// describe compression options
-			Win32.AVICOMPRESSOPTIONS opts = new Win32.AVICOMPRESSOPTIONS();
+            // describe compression options
+            Win32.AVICOMPRESSOPTIONS opts = new Win32.AVICOMPRESSOPTIONS
+            {
+                fccHandler = Win32.mmioFOURCC(codec),
+                dwQuality = quality
+            };
 
-			opts.fccHandler	= Win32.mmioFOURCC(codec);
-			opts.dwQuality	= quality;
+            //
+            // Win32.AVISaveOptions(stream, ref opts, IntPtr.Zero);
 
-			//
-			// Win32.AVISaveOptions(stream, ref opts, IntPtr.Zero);
-			
-			// create compressed stream
-			if (Win32.AVIMakeCompressedStream(out streamCompressed, stream, ref opts, IntPtr.Zero) != 0)
+            // create compressed stream
+            if (Win32.AVIMakeCompressedStream(out streamCompressed, stream, ref opts, IntPtr.Zero) != 0)
 				throw new ApplicationException("Failed creating compressed stream");
 
 			// describe frame format
