@@ -18,7 +18,7 @@ namespace AIMLBot.Utils
         /// <summary>
         /// Contains the child nodes of this node
         /// </summary>
-        private Dictionary<string, Node> children = new Dictionary<string, Node>();
+        private readonly Dictionary<string, Node> children = new Dictionary<string, Node>();
 
         /// <summary>
         /// The number of direct children (non-recursive) of this node
@@ -58,7 +58,7 @@ namespace AIMLBot.Utils
         /// <param name="path">the path for the category</param>
         /// <param name="template">the template to find at the end of the path</param>
         /// <param name="filename">the file that was the source of this category</param>
-        public void addCategory(string path, string template, string filename)
+        public void AddCategory(string path, string template, string filename)
         {
             if (template.Length == 0)
             {
@@ -92,13 +92,15 @@ namespace AIMLBot.Utils
             if (this.children.ContainsKey(firstWord))
             {
                 Node childNode = this.children[firstWord];
-                childNode.addCategory(newPath, template, filename);
+                childNode.AddCategory(newPath, template, filename);
             }
             else
             {
-                Node childNode = new Node();
-                childNode.word = firstWord;
-                childNode.addCategory(newPath, template, filename);
+                Node childNode = new Node
+                {
+                    word = firstWord
+                };
+                childNode.AddCategory(newPath, template, filename);
                 this.children.Add(childNode.word, childNode);
             }
         }
@@ -117,12 +119,12 @@ namespace AIMLBot.Utils
         /// <param name="matchstate">The part of the input path the node represents</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
         /// <returns>The template to process to generate the output</returns>
-        public string evaluate(string path, SubQuery query, Request request, MatchState matchstate, StringBuilder wildcard)
+        public string Evaluate(string path, SubQuery query, Request request, MatchState matchstate, StringBuilder wildcard)
         {
             // check for timeout
             if (!request.overrideTimeout && request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
             {
-                request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\"");
+                request.bot.WriteToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\"");
                 request.hasTimedOut = true;
                 return string.Empty;
             }
@@ -138,7 +140,7 @@ namespace AIMLBot.Utils
                 {
                     // if we get here it means that there is a wildcard in the user input part of the
                     // path.
-                    this.storeWildCard(path, wildcard);
+                    this.StoreWildCard(path, wildcard);
                 }
                 return this.template;
             }
@@ -167,10 +169,10 @@ namespace AIMLBot.Utils
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                this.storeWildCard(splitPath[0],newWildcard);
+                this.StoreWildCard(splitPath[0],newWildcard);
                 
                 // move down into the identified branch of the GraphMaster structure
-                string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard);
+                string result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard);
 
                 // and if we get a result from the branch process the wildcard matches and return 
                 // the result
@@ -221,7 +223,7 @@ namespace AIMLBot.Utils
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 StringBuilder newWildcard = new StringBuilder();
-                string result = childNode.evaluate(newPath, query, request, newMatchstate,newWildcard);
+                string result = childNode.Evaluate(newPath, query, request, newMatchstate,newWildcard);
                 // and if we get a result from the child return it
                 if (result.Length > 0)
                 {
@@ -259,9 +261,9 @@ namespace AIMLBot.Utils
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                this.storeWildCard(splitPath[0], newWildcard);
+                this.StoreWildCard(splitPath[0], newWildcard);
 
-                string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard);
+                string result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard);
                 // and if we get a result from the branch process and return it
                 if (result.Length > 0)
                 {
@@ -293,8 +295,8 @@ namespace AIMLBot.Utils
             // valid if we proceed with the tail.
             if ((this.word == "_") || (this.word == "*"))
             {
-                this.storeWildCard(splitPath[0], wildcard);
-                return this.evaluate(newPath, query, request, matchstate, wildcard);
+                this.StoreWildCard(splitPath[0], wildcard);
+                return this.Evaluate(newPath, query, request, matchstate, wildcard);
             }
 
             // If we get here then we're at a dead end so return an empty string. Hopefully, if the
@@ -309,7 +311,7 @@ namespace AIMLBot.Utils
         /// </summary>
         /// <param name="word">The word matched by the wildcard</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
-        private void storeWildCard(string word, StringBuilder wildcard)
+        private void StoreWildCard(string word, StringBuilder wildcard)
         {
             if (wildcard.Length > 0)
             {

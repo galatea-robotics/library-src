@@ -13,7 +13,7 @@ namespace AIMLBot.AIMLTagHandlers
     /// As with all AIML elements, nested forms should be parsed from inside out, so embedded srais are 
     /// perfectly acceptable. 
     /// </summary>
-    public class srai : AIMLBot.Utils.AIMLTagHandler
+    public class Srai : AIMLBot.Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -24,7 +24,7 @@ namespace AIMLBot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public srai(AIMLBot.Bot bot,
+        public Srai(AIMLBot.Bot bot,
                         AIMLBot.User user,
                         AIMLBot.Utils.SubQuery query,
                         AIMLBot.Request request,
@@ -40,8 +40,10 @@ namespace AIMLBot.AIMLTagHandlers
             {
                 if (this.templateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(this.templateNode.InnerText, this.user, this.bot, this.request.overrideTimeout);
-                    subRequest.StartedOn = this.request.StartedOn; // make sure we don't keep adding time to the request
+                    Request subRequest = new Request(this.templateNode.InnerText, this.user, this.bot, this.request.overrideTimeout)
+                    {
+                        StartedOn = this.request.StartedOn // make sure we don't keep adding time to the request
+                    };
                     Result subQuery = this.bot.Chat(subRequest);
                     this.request.hasTimedOut = subRequest.hasTimedOut;
                     return subQuery.Output;

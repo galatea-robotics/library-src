@@ -46,11 +46,11 @@ namespace AIMLBot.AIMLTagHandlers
                         try
                         {
                             doc.Load(path);
-                            this.bot.loadAIMLFromXML(doc, path);
+                            this.bot.LoadAIMLFromXML(doc, path);
                         }
                         catch
                         {
-                            this.bot.writeToLog("ERROR! Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
+                            this.bot.WriteToLog("ERROR! Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
                         }
                     }
                 }

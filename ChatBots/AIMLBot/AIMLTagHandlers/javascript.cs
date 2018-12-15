@@ -30,7 +30,7 @@ namespace AIMLBot.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            this.bot.writeToLog("The javascript tag is not implemented in this bot");
+            this.bot.WriteToLog("The javascript tag is not implemented in this bot");
             return string.Empty;
         }
     }

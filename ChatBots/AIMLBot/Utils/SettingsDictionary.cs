@@ -17,13 +17,13 @@ namespace AIMLBot.Utils
         /// <summary>
         /// Holds a dictionary of settings
         /// </summary>
-        private Dictionary<string, string> settingsHash = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> settingsHash = new Dictionary<string, string>();
 
         /// <summary>
         /// Contains an ordered collection of all the keys (unfortunately Dictionary<,>s are
         /// not ordered)
         /// </summary>
-        private List<string> orderedKeys = new List<string>();
+        private readonly List<string> orderedKeys = new List<string>();
 
         /// <summary>
         /// The bot this dictionary is associated with
@@ -92,7 +92,7 @@ namespace AIMLBot.Utils
         /// <item name="name" value="value"/>
         /// </summary>
         /// <param name="pathToSettings">The file containing the settings</param>
-        public void loadSettings(string pathToSettings)
+        public void LoadSettings(string pathToSettings)
         {
             if (pathToSettings.Length > 0)
             {
@@ -101,7 +101,7 @@ namespace AIMLBot.Utils
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(pathToSettings);
-                    this.loadSettings(xmlDoc);
+                    this.LoadSettings(xmlDoc);
                 }
                 else
                 {
@@ -126,10 +126,10 @@ namespace AIMLBot.Utils
         /// <item name="name" value="value"/>
         /// </summary>
         /// <param name="settingsAsXML">The settings as an XML document</param>
-        public void loadSettings(XmlDocument settingsAsXML)
+        public void LoadSettings(XmlDocument settingsAsXML)
         {
             // empty the hash
-            this.clearSettings();
+            this.ClearSettings();
 
             XmlNodeList rootChildren = settingsAsXML.DocumentElement.ChildNodes;
 
@@ -143,7 +143,7 @@ namespace AIMLBot.Utils
                         string value = myNode.Attributes["value"].Value;
                         if (name.Length > 0)
                         {
-                            this.addSetting(name, value);
+                            this.AddSetting(name, value);
                         }
                     }
                 }
@@ -156,12 +156,12 @@ namespace AIMLBot.Utils
         /// </summary>
         /// <param name="name">The name of the new setting</param>
         /// <param name="value">The value associated with this setting</param>
-        public void addSetting(string name, string value)
+        public void AddSetting(string name, string value)
         {
             string key = MakeCaseInsensitive.TransformInput(name);
             if (key.Length > 0)
             {
-                this.removeSetting(key);
+                this.RemoveSetting(key);
                 this.orderedKeys.Add(key);
                 this.settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
             }
@@ -171,18 +171,18 @@ namespace AIMLBot.Utils
         /// Removes the named setting from this class
         /// </summary>
         /// <param name="name">The name of the setting to remove</param>
-        public void removeSetting(string name)
+        public void RemoveSetting(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
             this.orderedKeys.Remove(normalizedName);
-            this.removeFromHash(normalizedName);
+            this.RemoveFromHash(normalizedName);
         }
 
         /// <summary>
         /// Removes a named setting from the Dictionary<,>
         /// </summary>
         /// <param name="name">the key for the Dictionary<,></param>
-        private void removeFromHash(string name)
+        private void RemoveFromHash(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
             this.settingsHash.Remove(normalizedName);
@@ -194,12 +194,12 @@ namespace AIMLBot.Utils
         /// </summary>
         /// <param name="name">the name of the setting</param>
         /// <param name="value">the new value</param>
-        public void updateSetting(string name, string value)
+        public void UpdateSetting(string name, string value)
         {
             string key = MakeCaseInsensitive.TransformInput(name);
             if (this.orderedKeys.Contains(key))
             {
-                this.removeFromHash(key);
+                this.RemoveFromHash(key);
                 this.settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
             }
         }
@@ -207,7 +207,7 @@ namespace AIMLBot.Utils
         /// <summary>
         /// Clears the dictionary to an empty state
         /// </summary>
-        public void clearSettings()
+        public void ClearSettings()
         {
             this.orderedKeys.Clear();
             this.settingsHash.Clear();
@@ -218,10 +218,10 @@ namespace AIMLBot.Utils
         /// </summary>
         /// <param name="name">the name of the setting whose value we're interested in</param>
         /// <returns>the value of the setting</returns>
-        public string grabSetting(string name)
+        public string GrabSetting(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
-            if (this.containsSettingCalled(normalizedName))
+            if (this.ContainsSettingCalled(normalizedName))
             {
                 return (string)this.settingsHash[normalizedName];
             }
@@ -236,7 +236,7 @@ namespace AIMLBot.Utils
         /// </summary>
         /// <param name="name">The setting name to check</param>
         /// <returns>Existential truth value</returns>
-        public bool containsSettingCalled(string name)
+        public bool ContainsSettingCalled(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
             if (normalizedName.Length > 0)
@@ -271,7 +271,7 @@ namespace AIMLBot.Utils
         {
             foreach (string key in this.orderedKeys)
             {
-                target.addSetting(key, this.grabSetting(key));
+                target.AddSetting(key, this.GrabSetting(key));
             }
         }
         #endregion

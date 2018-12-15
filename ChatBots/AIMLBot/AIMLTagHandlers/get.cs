@@ -51,7 +51,7 @@ namespace AIMLBot.AIMLTagHandlers
                     {
                         if (this.templateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            return this.user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
+                            return this.user.Predicates.GrabSetting(this.templateNode.Attributes[0].Value);
                         }
                     }
                 }

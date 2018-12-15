@@ -45,7 +45,7 @@ namespace AIMLBot.AIMLTagHandlers
                     if (this.templateNode.Attributes[0].Name.ToLower() == "name")
                     {
                         string key = this.templateNode.Attributes["name"].Value;
-                        return (string)this.bot.GlobalSettings.grabSetting(key);
+                        return (string)this.bot.GlobalSettings.GrabSetting(key);
                     }
                 }
             }

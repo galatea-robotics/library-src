@@ -49,7 +49,7 @@ namespace AIMLBot.AIMLTagHandlers
             {
                 if (this.templateNode.Attributes.Count == 0)
                 {
-                    return this.user.getResultSentence();
+                    return this.user.GetResultSentence();
                 }
                 else if (this.templateNode.Attributes.Count == 1)
                 {
@@ -67,11 +67,11 @@ namespace AIMLBot.AIMLTagHandlers
                                     int sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
                                     {
-                                        return this.user.getResultSentence(result - 1, sentence - 1);
+                                        return this.user.GetResultSentence(result - 1, sentence - 1);
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                                     }
                                 }
                                 else
@@ -79,17 +79,17 @@ namespace AIMLBot.AIMLTagHandlers
                                     int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
-                                        return this.user.getResultSentence(result - 1);
+                                        return this.user.GetResultSentence(result - 1);
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                             }
                         }
                     }

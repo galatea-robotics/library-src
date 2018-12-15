@@ -220,7 +220,7 @@ namespace ElizaBot
             return question.Substring(pos);
         }
 
-        private string defaultEmptyResponse;
+        private readonly string defaultEmptyResponse;
 
         private int repeatCount = 0;
         private string cleanedQ;
@@ -229,7 +229,7 @@ namespace ElizaBot
 
         #region Properties
         private ArrayList Patterns = new ArrayList();
-        private Pattern NoKeyPattern;
+        private readonly Pattern NoKeyPattern;
         #endregion
 
         #region Classes

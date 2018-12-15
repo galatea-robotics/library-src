@@ -13,7 +13,7 @@ namespace AIMLBot.Normalize
         /// <summary>
         /// The bot this sentence splitter is associated with
         /// </summary>
-        private AIMLBot.Bot bot;
+        private readonly AIMLBot.Bot bot;
 
         /// <summary>
         /// The raw input string

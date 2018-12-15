@@ -144,7 +144,7 @@ namespace AIMLBot.AIMLTagHandlers
 
                     if ((name.Length > 0) & (value.Length > 0))
                     {
-                        string actualValue = this.user.Predicates.grabSetting(name);
+                        string actualValue = this.user.Predicates.GrabSetting(name);
                         Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                         if (matcher.IsMatch(actualValue))
                         {
@@ -165,7 +165,7 @@ namespace AIMLBot.AIMLTagHandlers
                                 {
                                     if (childLINode.Attributes[0].Name.ToLower() == "value")
                                     {
-                                        string actualValue = this.user.Predicates.grabSetting(name);
+                                        string actualValue = this.user.Predicates.GrabSetting(name);
                                         Regex matcher = new Regex(childLINode.Attributes[0].Value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                         if (matcher.IsMatch(actualValue))
                                         {
@@ -211,7 +211,7 @@ namespace AIMLBot.AIMLTagHandlers
 
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
-                                    string actualValue = this.user.Predicates.grabSetting(name);
+                                    string actualValue = this.user.Predicates.GrabSetting(name);
                                     Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*","[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                     if (matcher.IsMatch(actualValue))
                                     {

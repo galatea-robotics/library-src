@@ -47,7 +47,7 @@ namespace AIMLBot.AIMLTagHandlers
                     }
                     else
                     {
-                        this.bot.writeToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
+                        this.bot.WriteToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
                     }
                 }
                 else if (this.templateNode.Attributes.Count == 1)
@@ -67,17 +67,17 @@ namespace AIMLBot.AIMLTagHandlers
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        this.bot.WriteToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                                     }
                                 }
                                 else
                                 {
-                                    this.bot.writeToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
+                                    this.bot.WriteToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("ERROR! A thatstar tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                this.bot.WriteToLog("ERROR! A thatstar tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
                             }
                         }
                     }

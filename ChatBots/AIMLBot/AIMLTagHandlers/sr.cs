@@ -41,7 +41,7 @@ namespace AIMLBot.AIMLTagHandlers
                 string starContent = recursiveStar.Transform();
 
                 XmlNode sraiNode = AIMLBot.Utils.AIMLTagHandler.getNode("<srai>"+starContent+"</srai>");
-                srai sraiHandler = new srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
+                Srai sraiHandler = new Srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
                 return sraiHandler.Transform();
             }
             return string.Empty;
