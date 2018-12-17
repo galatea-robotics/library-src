@@ -14,7 +14,7 @@ namespace AIMLBot.AIMLTagHandlers
     /// 
     /// The topicstar element does not have any content. 
     /// </summary>
-    public class topicstar : AIMLBot.Utils.AIMLTagHandler
+    public class Topicstar : AIMLBot.Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -25,7 +25,7 @@ namespace AIMLBot.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public topicstar(AIMLBot.Bot bot,
+        public Topicstar(AIMLBot.Bot bot,
                         AIMLBot.User user,
                         AIMLBot.Utils.SubQuery query,
                         AIMLBot.Request request,

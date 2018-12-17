@@ -59,7 +59,7 @@ namespace AIMLBot
         /// <summary>
         /// Holds references to the assemblies that hold the custom tag handling code.
         /// </summary>
-        private Dictionary<string, Assembly> LateBindingAssemblies = new Dictionary<string, Assembly>();
+        private readonly Dictionary<string, Assembly> LateBindingAssemblies = new Dictionary<string, Assembly>();
 
         /// <summary>
         /// An List<> containing the tokens used to split the input into sentences during the 
@@ -70,7 +70,7 @@ namespace AIMLBot
         /// <summary>
         /// A buffer to hold log messages to be written out to the log file when a max size is reached
         /// </summary>
-        private List<string> LogBuffer = new List<string>();
+        private readonly List<string> LogBuffer = new List<string>();
 
         /// <summary>
         /// How big to let the log buffer get before writing to disk
@@ -79,7 +79,7 @@ namespace AIMLBot
         {
             get
             {
-                return Convert.ToInt32(this.GlobalSettings.grabSetting("maxlogbuffersize"));
+                return Convert.ToInt32(this.GlobalSettings.GrabSetting("maxlogbuffersize"));
             }
         }
 
@@ -95,7 +95,7 @@ namespace AIMLBot
         {
             get
             {
-                return this.GlobalSettings.grabSetting("notacceptinguserinputmessage");
+                return this.GlobalSettings.GrabSetting("notacceptinguserinputmessage");
             }
         }
 
@@ -106,7 +106,7 @@ namespace AIMLBot
         {
             get
             {
-                return Convert.ToDouble(this.GlobalSettings.grabSetting("timeout"));
+                return Convert.ToDouble(this.GlobalSettings.GrabSetting("timeout"));
             }
         }
 
@@ -117,7 +117,7 @@ namespace AIMLBot
         {
             get
             {
-                return this.GlobalSettings.grabSetting("timeoutmessage");
+                return this.GlobalSettings.GrabSetting("timeoutmessage");
             }
         }
 
@@ -128,7 +128,7 @@ namespace AIMLBot
         {
             get
             {
-                return new CultureInfo(this.GlobalSettings.grabSetting("culture"));
+                return new CultureInfo(this.GlobalSettings.GrabSetting("culture"));
             }
         }
 
@@ -139,7 +139,7 @@ namespace AIMLBot
         {
             get
             {
-                return new Regex(this.GlobalSettings.grabSetting("stripperregex"),RegexOptions.IgnorePatternWhitespace);
+                return new Regex(this.GlobalSettings.GrabSetting("stripperregex"),RegexOptions.IgnorePatternWhitespace);
             }
         }
 
@@ -150,7 +150,7 @@ namespace AIMLBot
         {
             get
             {
-                return this.GlobalSettings.grabSetting("adminemail");
+                return this.GlobalSettings.GrabSetting("adminemail");
             }
             set
             {
@@ -167,7 +167,7 @@ namespace AIMLBot
                     if (reStrict.IsMatch(value))
                     {
                         // update the settings
-                        this.GlobalSettings.addSetting("adminemail", value);
+                        this.GlobalSettings.AddSetting("adminemail", value);
                     }
                     else
                     {
@@ -176,7 +176,7 @@ namespace AIMLBot
                 }
                 else
                 {
-                    this.GlobalSettings.addSetting("adminemail", "");
+                    this.GlobalSettings.AddSetting("adminemail", "");
                 }
             }
         }
@@ -188,7 +188,7 @@ namespace AIMLBot
         {
             get
             {
-                string islogging = this.GlobalSettings.grabSetting("islogging");
+                string islogging = this.GlobalSettings.GrabSetting("islogging");
                 if (islogging.ToLower() == "true")
                 {
                     return true;
@@ -208,7 +208,7 @@ namespace AIMLBot
         {
             get
             {
-                string willcallhome = this.GlobalSettings.grabSetting("willcallhome");
+                string willcallhome = this.GlobalSettings.GrabSetting("willcallhome");
                 if (willcallhome.ToLower() == "true")
                 {
                     return true;
@@ -232,7 +232,7 @@ namespace AIMLBot
         {
             get
             {
-                int sex = Convert.ToInt32(this.GlobalSettings.grabSetting("gender"));
+                int sex = Convert.ToInt32(this.GlobalSettings.GrabSetting("gender"));
                 Gender result;
                 switch (sex)
                 {
@@ -353,7 +353,7 @@ namespace AIMLBot
         /// </summary>
         public Bot()
         {
-            this.setup();  
+            this.Setup();  
         }
 
         #region Settings methods
@@ -361,10 +361,10 @@ namespace AIMLBot
         /// <summary>
         /// Loads AIML from .aiml files into the graphmaster "brain" of the bot
         /// </summary>
-        public void loadAIMLFromFiles()
+        public void LoadAIMLFromFiles()
         {
             AIMLLoader loader = new AIMLLoader(this);
-            loader.loadAIML();
+            loader.LoadAIML();
         }
 
         /// <summary>
@@ -372,16 +372,16 @@ namespace AIMLBot
         /// </summary>
         /// <param name="newAIML">The XML document containing the AIML</param>
         /// <param name="filename">The originator of the XML document</param>
-        public void loadAIMLFromXML(XmlDocument newAIML, string filename)
+        public void LoadAIMLFromXML(XmlDocument newAIML, string filename)
         {
             AIMLLoader loader = new AIMLLoader(this);
-            loader.loadAIMLFromXML(newAIML, filename);
+            loader.LoadAIMLFromXML(newAIML, filename);
         }
 
         /// <summary>
         /// Instantiates the dictionary objects and collections associated with this class
         /// </summary>
-        private void setup()
+        private void Setup()
         {
             this.GlobalSettings = new SettingsDictionary(this);
             this.GenderSubstitutions = new SettingsDictionary(this);
@@ -397,11 +397,11 @@ namespace AIMLBot
         /// <summary>
         /// Loads settings based upon the default location of the Settings.xml file
         /// </summary>
-        public void loadSettings()
+        public void LoadSettings()
         {
             // try a safe default setting for the settings xml file
             string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("config", "Settings.xml"));
-            this.loadSettings(path);          
+            this.LoadSettings(path);          
         }
          */
 
@@ -410,150 +410,150 @@ namespace AIMLBot
         /// Also generates some default values if such values have not been set by the settings file.
         /// </summary>
         /// <param name="pathToSettings">Path to the settings xml file</param>
-        public void loadSettings(string pathToConfig)
+        public void LoadSettings(string pathToConfig)
         {
             string pathToSettings = Path.Combine(pathToConfig, "Settings.xml");
             _pathToConfigFiles = pathToConfig;
 
-            this.GlobalSettings.loadSettings(pathToSettings);
+            this.GlobalSettings.LoadSettings(pathToSettings);
 
             // Checks for some important default settings
             /*
-            if (!this.GlobalSettings.containsSettingCalled("version"))
+            if (!this.GlobalSettings.ContainsSettingCalled("version"))
             {
-                this.GlobalSettings.addSetting("version", Environment.Version.ToString());
+                this.GlobalSettings.AddSetting("version", Environment.Version.ToString());
             }
              */
-            if (!this.GlobalSettings.containsSettingCalled("name"))
+            if (!this.GlobalSettings.ContainsSettingCalled("name"))
             {
-                this.GlobalSettings.addSetting("name", "Unknown");
+                this.GlobalSettings.AddSetting("name", "Unknown");
             }
-            if (!this.GlobalSettings.containsSettingCalled("botmaster"))
+            if (!this.GlobalSettings.ContainsSettingCalled("botmaster"))
             {
-                this.GlobalSettings.addSetting("botmaster", "Unknown");
+                this.GlobalSettings.AddSetting("botmaster", "Unknown");
             } 
-            if (!this.GlobalSettings.containsSettingCalled("master"))
+            if (!this.GlobalSettings.ContainsSettingCalled("master"))
             {
-                this.GlobalSettings.addSetting("botmaster", "Unknown");
+                this.GlobalSettings.AddSetting("botmaster", "Unknown");
             }
-            if (!this.GlobalSettings.containsSettingCalled("author"))
+            if (!this.GlobalSettings.ContainsSettingCalled("author"))
             {
-                this.GlobalSettings.addSetting("author", "Nicholas H.Tollervey");
+                this.GlobalSettings.AddSetting("author", "Nicholas H.Tollervey");
             }
-            if (!this.GlobalSettings.containsSettingCalled("location"))
+            if (!this.GlobalSettings.ContainsSettingCalled("location"))
             {
-                this.GlobalSettings.addSetting("location", "Unknown");
+                this.GlobalSettings.AddSetting("location", "Unknown");
             }
-            if (!this.GlobalSettings.containsSettingCalled("gender"))
+            if (!this.GlobalSettings.ContainsSettingCalled("gender"))
             {
-                this.GlobalSettings.addSetting("gender", "-1");
+                this.GlobalSettings.AddSetting("gender", "-1");
             }
-            if (!this.GlobalSettings.containsSettingCalled("birthday"))
+            if (!this.GlobalSettings.ContainsSettingCalled("birthday"))
             {
-                this.GlobalSettings.addSetting("birthday", "2006/11/08");
+                this.GlobalSettings.AddSetting("birthday", "2006/11/08");
             }
-            if (!this.GlobalSettings.containsSettingCalled("birthplace"))
+            if (!this.GlobalSettings.ContainsSettingCalled("birthplace"))
             {
-                this.GlobalSettings.addSetting("birthplace", "Towcester, Northamptonshire, UK");
+                this.GlobalSettings.AddSetting("birthplace", "Towcester, Northamptonshire, UK");
             }
-            if (!this.GlobalSettings.containsSettingCalled("website"))
+            if (!this.GlobalSettings.ContainsSettingCalled("website"))
             {
-                this.GlobalSettings.addSetting("website", "http://sourceforge.net/projects/AIMLBot");
+                this.GlobalSettings.AddSetting("website", "http://sourceforge.net/projects/AIMLBot");
             }
-            if (this.GlobalSettings.containsSettingCalled("adminemail"))
+            if (this.GlobalSettings.ContainsSettingCalled("adminemail"))
             {
-                string emailToCheck = this.GlobalSettings.grabSetting("adminemail");
+                string emailToCheck = this.GlobalSettings.GrabSetting("adminemail");
                 this.AdminEmail = emailToCheck;
             }
             else
             {
-                this.GlobalSettings.addSetting("adminemail", "");
+                this.GlobalSettings.AddSetting("adminemail", "");
             }
-            if (!this.GlobalSettings.containsSettingCalled("islogging"))
+            if (!this.GlobalSettings.ContainsSettingCalled("islogging"))
             {
-                this.GlobalSettings.addSetting("islogging", "False");
+                this.GlobalSettings.AddSetting("islogging", "False");
             }
-            if (!this.GlobalSettings.containsSettingCalled("willcallhome"))
+            if (!this.GlobalSettings.ContainsSettingCalled("willcallhome"))
             {
-                this.GlobalSettings.addSetting("willcallhome", "False");
+                this.GlobalSettings.AddSetting("willcallhome", "False");
             }
-            if (!this.GlobalSettings.containsSettingCalled("timeout"))
+            if (!this.GlobalSettings.ContainsSettingCalled("timeout"))
             {
-                this.GlobalSettings.addSetting("timeout", "2000");
+                this.GlobalSettings.AddSetting("timeout", "2000");
             }
-            if (!this.GlobalSettings.containsSettingCalled("timeoutmessage"))
+            if (!this.GlobalSettings.ContainsSettingCalled("timeoutmessage"))
             {
-                this.GlobalSettings.addSetting("timeoutmessage", "ERROR: The request has timed out.");
+                this.GlobalSettings.AddSetting("timeoutmessage", "ERROR: The request has timed out.");
             }
-            if (!this.GlobalSettings.containsSettingCalled("culture"))
+            if (!this.GlobalSettings.ContainsSettingCalled("culture"))
             {
-                this.GlobalSettings.addSetting("culture", "en-US");
+                this.GlobalSettings.AddSetting("culture", "en-US");
             }
-            if (!this.GlobalSettings.containsSettingCalled("splittersfile"))
+            if (!this.GlobalSettings.ContainsSettingCalled("splittersfile"))
             {
-                this.GlobalSettings.addSetting("splittersfile", "Splitters.xml");
+                this.GlobalSettings.AddSetting("splittersfile", "Splitters.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("person2substitutionsfile"))
+            if (!this.GlobalSettings.ContainsSettingCalled("person2substitutionsfile"))
             {
-                this.GlobalSettings.addSetting("person2substitutionsfile", "Person2Substitutions.xml");
+                this.GlobalSettings.AddSetting("person2substitutionsfile", "Person2Substitutions.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("personsubstitutionsfile"))
+            if (!this.GlobalSettings.ContainsSettingCalled("personsubstitutionsfile"))
             {
-                this.GlobalSettings.addSetting("personsubstitutionsfile", "PersonSubstitutions.xml");
+                this.GlobalSettings.AddSetting("personsubstitutionsfile", "PersonSubstitutions.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("gendersubstitutionsfile"))
+            if (!this.GlobalSettings.ContainsSettingCalled("gendersubstitutionsfile"))
             {
-                this.GlobalSettings.addSetting("gendersubstitutionsfile", "GenderSubstitutions.xml");
+                this.GlobalSettings.AddSetting("gendersubstitutionsfile", "GenderSubstitutions.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("defaultpredicates"))
+            if (!this.GlobalSettings.ContainsSettingCalled("defaultpredicates"))
             {
-                this.GlobalSettings.addSetting("defaultpredicates", "DefaultPredicates.xml");
+                this.GlobalSettings.AddSetting("defaultpredicates", "DefaultPredicates.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("substitutionsfile"))
+            if (!this.GlobalSettings.ContainsSettingCalled("substitutionsfile"))
             {
-                this.GlobalSettings.addSetting("substitutionsfile", "Substitutions.xml");
+                this.GlobalSettings.AddSetting("substitutionsfile", "Substitutions.xml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("aimldirectory"))
+            if (!this.GlobalSettings.ContainsSettingCalled("aimldirectory"))
             {
-                this.GlobalSettings.addSetting("aimldirectory", "aiml");
+                this.GlobalSettings.AddSetting("aimldirectory", "aiml");
             }
-            if (!this.GlobalSettings.containsSettingCalled("configdirectory"))
+            if (!this.GlobalSettings.ContainsSettingCalled("configdirectory"))
             {
-                this.GlobalSettings.addSetting("configdirectory", "config");
+                this.GlobalSettings.AddSetting("configdirectory", "config");
             }
-            if (!this.GlobalSettings.containsSettingCalled("logdirectory"))
+            if (!this.GlobalSettings.ContainsSettingCalled("logdirectory"))
             {
-                this.GlobalSettings.addSetting("logdirectory", "logs");
+                this.GlobalSettings.AddSetting("logdirectory", "logs");
             }
-            if (!this.GlobalSettings.containsSettingCalled("maxlogbuffersize"))
+            if (!this.GlobalSettings.ContainsSettingCalled("maxlogbuffersize"))
             {
-                this.GlobalSettings.addSetting("maxlogbuffersize", "64");
+                this.GlobalSettings.AddSetting("maxlogbuffersize", "64");
             }
-            if (!this.GlobalSettings.containsSettingCalled("notacceptinguserinputmessage"))
+            if (!this.GlobalSettings.ContainsSettingCalled("notacceptinguserinputmessage"))
             {
-                this.GlobalSettings.addSetting("notacceptinguserinputmessage", "This bot is currently set to not accept user input.");
+                this.GlobalSettings.AddSetting("notacceptinguserinputmessage", "This bot is currently set to not accept user input.");
             }
-            if (!this.GlobalSettings.containsSettingCalled("stripperregex"))
+            if (!this.GlobalSettings.ContainsSettingCalled("stripperregex"))
             {
-                this.GlobalSettings.addSetting("stripperregex", "[^0-9a-zA-Z]");
+                this.GlobalSettings.AddSetting("stripperregex", "[^0-9a-zA-Z]");
             }
 
             // Load the dictionaries for this Bot from the various configuration files
-            this.Person2Substitutions.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("person2substitutionsfile")));
-            this.PersonSubstitutions.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("personsubstitutionsfile")));
-            this.GenderSubstitutions.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("gendersubstitutionsfile")));
-            this.DefaultPredicates.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("defaultpredicates")));
-            this.Substitutions.loadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.grabSetting("substitutionsfile")));
+            this.Person2Substitutions.LoadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.GrabSetting("person2substitutionsfile")));
+            this.PersonSubstitutions.LoadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.GrabSetting("personsubstitutionsfile")));
+            this.GenderSubstitutions.LoadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.GrabSetting("gendersubstitutionsfile")));
+            this.DefaultPredicates.LoadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.GrabSetting("defaultpredicates")));
+            this.Substitutions.LoadSettings(Path.Combine(this.PathToConfigFiles, this.GlobalSettings.GrabSetting("substitutionsfile")));
 
             // Grab the splitters for this bot
-            this.loadSplitters(Path.Combine(this.PathToConfigFiles,this.GlobalSettings.grabSetting("splittersfile")));
+            this.LoadSplitters(Path.Combine(this.PathToConfigFiles,this.GlobalSettings.GrabSetting("splittersfile")));
         }
 
         /// <summary>
         /// Loads the splitters for this bot from the supplied config file (or sets up some safe defaults)
         /// </summary>
         /// <param name="pathToSplitters">Path to the config file</param>
-        private void loadSplitters(string pathToSplitters)
+        private void LoadSplitters(string pathToSplitters)
         {
             FileInfo splittersFile = new FileInfo(pathToSplitters);
             if (splittersFile.Exists)
@@ -603,7 +603,7 @@ namespace AIMLBot
         /// Log files have the form of yyyyMMdd.log.
         /// </summary>
         /// <param name="message">The message to log</param>
-        public void writeToLog(string message)
+        public void WriteToLog(string message)
         {
             this.LastLogMessage = message;
             if (this.IsLogging)
@@ -682,7 +682,7 @@ namespace AIMLBot
                 foreach (string sentence in rawSentences)
                 {
                     result.InputSentences.Add(sentence);
-                    string path = loader.generatePath(sentence, request.user.getLastBotOutput(), request.user.Topic, true);
+                    string path = loader.GeneratePath(sentence, request.user.GetLastBotOutput(), request.user.Topic, true);
                     result.NormalizedPaths.Add(path);
                 }
 
@@ -690,7 +690,7 @@ namespace AIMLBot
                 foreach (string path in result.NormalizedPaths)
                 {
                     Utils.SubQuery query = new SubQuery(path);
-                    query.Template = this.Graphmaster.evaluate(path, query, request, MatchState.UserInput, new StringBuilder());
+                    query.Template = this.Graphmaster.Evaluate(path, query, request, MatchState.UserInput, new StringBuilder());
                     result.SubQueries.Add(query);
                 }
 
@@ -702,7 +702,7 @@ namespace AIMLBot
                         try
                         {
                             XmlNode templateNode = AIMLTagHandler.getNode(query.Template);
-                            string outputSentence = this.processNode(templateNode, query, request, result, request.user);
+                            string outputSentence = this.ProcessNode(templateNode, query, request, result, request.user);
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
@@ -716,9 +716,9 @@ namespace AIMLBot
                                 this.phoneHome(e.Message, request);
                             }
                              */
-                            this.writeToLog("WARNING! A problem was encountered when trying to process the input: " + request.rawInput + " with the template: \"" + query.Template + "\"");
-                            this.writeToLog("Error Message: " + e.Message);
-                            this.writeToLog("Error Stack Trace: " + e.StackTrace);
+                            this.WriteToLog("WARNING! A problem was encountered when trying to process the input: " + request.rawInput + " with the template: \"" + query.Template + "\"");
+                            this.WriteToLog("Error Message: " + e.Message);
+                            this.WriteToLog("Error Stack Trace: " + e.StackTrace);
                         }
                     }
                 }
@@ -730,7 +730,7 @@ namespace AIMLBot
 
             // populate the Result object
             result.Duration = DateTime.Now - request.StartedOn;
-            request.user.addResult(result);
+            request.user.AddResult(result);
 
             return result;
         }
@@ -744,12 +744,12 @@ namespace AIMLBot
         /// <param name="result">the result to be sent to the user</param>
         /// <param name="user">the user who originated the request</param>
         /// <returns>the output string</returns>
-        private string processNode(XmlNode node, SubQuery query, Request request, Result result, User user)
+        private string ProcessNode(XmlNode node, SubQuery query, Request request, Result result, User user)
         {
             // check for timeout (to avoid infinite loops)
             if (!request.overrideTimeout && request.StartedOn.AddMilliseconds(request.bot.TimeOut) < DateTime.Now)
             {
-                request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\" processing template: \"" + query.Template + "\"");
+                request.bot.WriteToLog("WARNING! Request timeout. User: " + request.user.UserID + " raw input: \"" + request.rawInput + "\" processing template: \"" + query.Template + "\"");
                 request.hasTimedOut = true;
                 return string.Empty;
             }
@@ -764,7 +764,7 @@ namespace AIMLBot
                     // recursively check
                     foreach (XmlNode childNode in node.ChildNodes)
                     {
-                        templateResult.Append(this.processNode(childNode, query, request, result, user));
+                        templateResult.Append(this.ProcessNode(childNode, query, request, result, user));
                     }
                 }
                 return templateResult.ToString();
@@ -835,7 +835,7 @@ namespace AIMLBot
                             tagHandler = new AIMLTagHandlers.sr(this, user, query, request, result, node);
                             break;
                         case "srai":
-                            tagHandler = new AIMLTagHandlers.srai(this, user, query, request, result, node);
+                            tagHandler = new AIMLTagHandlers.Srai(this, user, query, request, result, node);
                             break;
                         case "star":
                             tagHandler = new AIMLTagHandlers.star(this, user, query, request, result, node);
@@ -853,7 +853,7 @@ namespace AIMLBot
                             tagHandler = new AIMLTagHandlers.think(this, user, query, request, result, node);
                             break;
                         case "topicstar":
-                            tagHandler = new AIMLTagHandlers.topicstar(this, user, query, request, result, node);
+                            tagHandler = new AIMLTagHandlers.Topicstar(this, user, query, request, result, node);
                             break;
                         case "uppercase":
                             tagHandler = new AIMLTagHandlers.uppercase(this, user, query, request, result, node);
@@ -881,7 +881,7 @@ namespace AIMLBot
                             {
                                 if (childNode.NodeType != XmlNodeType.Text)
                                 {
-                                    childNode.InnerXml = this.processNode(childNode, query, request, result, user);
+                                    childNode.InnerXml = this.ProcessNode(childNode, query, request, result, user);
                                 }
                             }
                         }
@@ -897,7 +897,7 @@ namespace AIMLBot
                             // recursively check
                             foreach (XmlNode childNode in resultNode.ChildNodes)
                             {
-                                recursiveResult.Append(this.processNode(childNode, query, request, result, user));
+                                recursiveResult.Append(this.ProcessNode(childNode, query, request, result, user));
                             }
                             return recursiveResult.ToString();
                         }
