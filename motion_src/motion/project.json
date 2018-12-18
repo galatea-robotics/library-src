@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Accord.Imaging": "3.8.0"
+    "Accord.Imaging": "3.8.0.0"
   },
   "frameworks": {
     ".NETFramework,Version=v3.5": {}

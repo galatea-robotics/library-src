@@ -841,7 +841,7 @@ namespace AIMLBot
                             tagHandler = new AIMLTagHandlers.think(this, user, query, request, result, node);
                             break;
                         case "topicstar":
-                            tagHandler = new AIMLTagHandlers.topicstar(this, user, query, request, result, node);
+                            tagHandler = new AIMLTagHandlers.Topicstar(this, user, query, request, result, node);
                             break;
                         case "uppercase":
                             tagHandler = new AIMLTagHandlers.uppercase(this, user, query, request, result, node);
