@@ -1,3 +1,4 @@
 .vs
 bin/_Debug
 obj
+*.csproj.user

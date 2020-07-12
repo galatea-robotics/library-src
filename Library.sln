@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1082
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIMLBot", "src\ChatBots\AIMLBot\AIMLBot.csproj", "{9C87D82C-0E27-4995-A2CB-72BCB84EF2E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIMLBot", "ChatBots\AIMLBot\AIMLBot.csproj", "{9C87D82C-0E27-4995-A2CB-72BCB84EF2E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eliza", "src\ChatBots\Eliza\Eliza.csproj", "{67264662-CA03-4ED0-8924-5843307E4B53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eliza", "ChatBots\Eliza\Eliza.csproj", "{67264662-CA03-4ED0-8924-5843307E4B53}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatBots", "ChatBots", "{37C8E3F4-C81B-4681-B044-6322D16402AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "motion", "motion", "{6C1ABBC6-DA44-449F-B397-DF50E4995167}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dshow", "src\motion\dshow\dshow.csproj", "{37B08AFD-F4BC-4E13-9119-537BA6A12CCB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dshow", "motion\dshow\dshow.csproj", "{37B08AFD-F4BC-4E13-9119-537BA6A12CCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "motion", "src\motion\motion\motion.csproj", "{F4799C73-DEE9-48F2-B626-32149CC30976}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "motion", "motion\motion\motion.csproj", "{F4799C73-DEE9-48F2-B626-32149CC30976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfw", "src\motion\vfw\vfw.csproj", "{ECAA3D55-19AB-440B-B82E-221AE06C4A5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vfw", "motion\vfw\vfw.csproj", "{ECAA3D55-19AB-440B-B82E-221AE06C4A5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
